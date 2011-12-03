@@ -1,0 +1,22 @@
+# -----------------------------------------------
+# Shell Aliases
+# -----------------------------------------------
+set_ls_alias=$(ls --color=auto -F 2>/dev/null)
+[ "$set_ls_alias" ] && alias ls='ls --color=auto -F'
+unset set_ls_alias
+
+alias emacs="/usr/local/Cellar/emacs/HEAD/Emacs.app/Contents/MacOS/Emacs -nw"
+alias tld='tail -f log/development.log'
+alias rsu='kill -HUP `cat tmp/pids/unicorn.pid`'
+alias stu='kill `cat tmp/pids/unicorn.pid`'
+alias be='bundle exec'
+alias bo='bundle open'
+
+alias snd='bundle exec unicorn -p3000'
+alias snd2='bundle exec unicorn -p4000'
+#alias acc='bundle exec unicorn -c config/unicorn.rb -p3001'
+alias dsh='bundle exec unicorn -p3002'
+alias pub='bundle exec unicorn -p3003'
+alias tab='bundle exec unicorn -p3004'
+alias anl='bundle exec unicorn -p3005'
+

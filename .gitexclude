@@ -1,0 +1,8 @@
+.DS_Store
+.com.apple.timemachine.supported
+.rake_tasks
+.rvmrc
+*.swp
+config/setup_load_paths.rb
+tags
+tmp/
