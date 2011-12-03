@@ -1,0 +1,5 @@
+My personal dotfiles. The .gitignore is set up to ignore everything first and then deliberately include certain files and directories into the domain of git management.
+
+I primarily use zsh and vim and specifially vim with the pathogen plugin for managing all my plugins. However, I also include here a bash configuration that mostly duplicates the functionality of the zsh configuration, but I don't maintain it as frequently as it is mostly for those situations where I find myself with access to bash and not zsh.
+
+In the zsh scripts, I have split out hostname and account completion into private local files. In addition, the scripts support a .localenv file for environment settings that may be specific to a particular machine and so shouldn't be maintained in a repo for common usage.
