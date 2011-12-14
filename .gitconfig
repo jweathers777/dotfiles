@@ -1,0 +1,38 @@
+[color]
+   ui = auto
+[color "branch"]
+   current = green
+   local = white
+   remote = yellow
+[color "diff"]
+   meta = yellow bold
+   frag = magenta bold
+   old = red bold
+   new = green bold
+[color "status"]
+   added = green
+   changed = yellow
+   untracked = red
+[core]
+   excludesfile = ~/.gitexclude
+[push]
+   default = tracking
+[alias]
+   br = branch
+   c  = commit
+   co = checkout
+   cp = cherry-pick
+   df = diff
+   dh = diff HEAD
+   dc = diff --staged
+   lf = log --pretty=fuller
+   lg = log
+   lp = log -p
+   lod = log --oneline --decorate
+   lpo = log --pretty=oneline --abbrev-commit --graph --decorate
+   st = status
+   pub = "!f() { git push -u ${1:-origin} `git symbolic-ref HEAD`; }; f"
+[mergetool]
+   keepBackup = false
+[merge]
+   tool = vimdiff
