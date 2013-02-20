@@ -26,7 +26,7 @@
    dh = diff HEAD
    dc = diff --staged
    lf = log --pretty=fuller
-   lg = log
+	lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
    lp = log -p
    lod = log --oneline --decorate
    lpo = log --pretty=oneline --abbrev-commit --graph --decorate
@@ -35,4 +35,6 @@
 [mergetool]
    keepBackup = false
 [merge]
-   tool = vimdiff
+	tool = fugitive
+[mergetool "fugitive"]
+	cmd = vim -f -c \"Gdiff\" \"$MERGED\"

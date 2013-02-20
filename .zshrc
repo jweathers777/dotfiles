@@ -1,19 +1,24 @@
 HISTFILE=~/.histfile
 HISTSIZE=10000
 SAVEHIST=$HISTSIZE
-setopt appendhistory
+setopt sharehistory
 setopt hist_ignore_all_dups
 setopt clobber
 
-export PATH=/usr/local/sbin:$PATH
+export PATH=/usr/local/bin:/usr/local/sbin:$PATH
 # set PATH so it includes user's private bin if it exists
 if [ -d "$HOME/bin" ] ; then
    export PATH="$HOME/bin:$PATH"
 fi
 
 export NODE_PATH=/usr/local/lib/node_modules
+export JAVA_HOME=$(/usr/libexec/java_home)
 
 bindkey -v
+bindkey -M viins 'jj' vi-cmd-mode
+bindkey '^R' history-incremental-search-backward
+#bindkey -M vi-command -x '",h":less ~/.vim/bash-vi-editing-mode-cheat-sheet.txt'
+#bindkey -M vi-insert -x '"\C-h":less ~/.vim/bash-vi-editing-mode-cheat-sheet.txt'
 
 autoload -Uz compinit
 compinit
@@ -138,6 +143,8 @@ compdef _rake rake
 
 # Import rvm
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && export rvm_prefix="$HOME/." && . "$HOME/.rvm/scripts/rvm"
+
+__rvm_project_rvmrc
 
 # -----------------------------------------------
 #  END

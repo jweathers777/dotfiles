@@ -9,6 +9,8 @@ alias emacs="/usr/local/Cellar/emacs/HEAD/Emacs.app/Contents/MacOS/Emacs -nw"
 alias tld='tail -f log/development.log'
 alias rsu='kill -HUP `cat tmp/pids/unicorn.pid`'
 alias stu='kill `cat tmp/pids/unicorn.pid`'
+alias brk='bundle exec rake'
+alias brl='bundle exec rails'
 alias be='bundle exec'
 alias bo='bundle open'
 

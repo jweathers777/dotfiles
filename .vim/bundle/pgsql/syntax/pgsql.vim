@@ -124,7 +124,7 @@ syn region pgsqlOperator	 start="coalesce(" end=")" contains=ALL
 syn region pgsqlOperator	 start="interval(" end=")" contains=ALL
 
 " Control flow functions
-syn keyword pgsqlFlow		 case when then else end
+syn keyword pgsqlFlow		 case when then else elsif end
 syn region pgsqlFlow		 start="ifnull("   end=")"  contains=ALL
 syn region pgsqlFlow		 start="nullif("   end=")"  contains=ALL
 syn region pgsqlFlow		 start="if("	   end=")"  contains=ALL

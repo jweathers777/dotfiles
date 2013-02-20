@@ -55,7 +55,7 @@ if [[ "$EUID" != "0" ]]; then
 fi
 
 function prompt_string { 
-   printf "${dark_gray}(${account_color}\u${bright_account_color}@${account_color}\h${dark_gray}:${path_color}\w${dark_gray})"
+   printf "${dark_gray}(${account_color}\\\\u${bright_account_color}@${account_color}\h${dark_gray}:${path_color}\w${dark_gray})"
    if true; then
       printf ""
       git status 2>&1 | \
@@ -106,3 +106,5 @@ prompt_command() {
 
 # Import rvm
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && export rvm_prefix="$HOME/." && . "$HOME/.rvm/scripts/rvm"
+
+PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting

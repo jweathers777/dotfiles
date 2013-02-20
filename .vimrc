@@ -29,11 +29,20 @@ set tabstop=3
 set shiftwidth=3
 set smarttab
 
+" Don't litter the place with swap files
+set directory=~/tmp,/var/tmp,/tmp
+
 " Fine-tune the C/C++/Java indentation options
 set cinoptions=:0,g0,(0,j1,p0,t0
 
 " Turn off the annoying bell sounds
 set vb t_vb=
+
+" Force myself to use the right motion keys
+noremap <Up> <NOP>
+noremap <Down> <NOP>
+noremap <Left> <NOP>
+noremap <Right> <NOP>
 
 " Toggle paste
 nnoremap <F2> :set invpaste paste?<CR>
@@ -68,6 +77,9 @@ set browsedir=current
 
 " Don't use Ex mode, use Q for formatting
 map Q gq
+
+" Easier than pressing ESC
+inoremap jj <ESC>
 
 let mapleader = ","
 
@@ -122,6 +134,7 @@ map <leader>z :ZoomWin<CR>
 
 " Map shortcut for ConqueTerm
 map <leader>e :ConqueTerm zsh<CR>
+let g:ConqueTerm_SendVisKey='<F3>'
 
 " Map shortcuts for ctags commands
 map <leader>rt :!ctags --extra=+f -R *<CR><CR>
@@ -133,6 +146,9 @@ map <leader>u :GundoToggle<CR>
 map <leader>lcd :lcd %:p:h<CR>
 
 map <leader>cp :let @+ = expand("%:p")<cr>
+
+" Control-P mapping
+let g:ctrlp_map = ',t'
 
 " Control settings for python highlighting
 let python_highlight_all = 1
@@ -150,13 +166,8 @@ if $TERM == 'screen'
 endif
 
 if &t_Co >= 256
-   if &diff
-      set background=light
-      colors peaksea
-   else
-      set background=dark
-      colors idlefingers256
-   endif
+   set background=dark
+   colors idlefingers256
 else
    set background=dark
    colors default
@@ -179,8 +190,7 @@ if has("autocmd")
       au!
 
       autocmd BufEnter Gemfile set filetype=ruby
-      autocmd FileType ruby setlocal ts=2 sw=2
-      autocmd FileType yaml setlocal ts=2 sw=2
+      autocmd FileType ruby,yaml,javascript,coffeescript,scala setlocal ts=2 sw=2
       autocmd FileType java setlocal ts=4 sw=4 tw=80
       autocmd FileType xml,xhtml,html,htm setlocal autoindent
       autocmd FileType xml,xhtml,html,htm let b:delimitMate_matchpairs="(:),{:},[:]"
@@ -199,6 +209,7 @@ if has("autocmd")
                \   exe "normal g`\"" |
                \ endif
 
+      au FilterWritePre * if &diff | set background=light | colorscheme peaksea | endif 
    augroup END
 
 else

@@ -1,2 +1,4 @@
 --type-add=ruby=.haml,.sass,.builder,.ru
+--type-add=js=.coffee
 --type-add=sql=.pgsql
+--ignore-dir=data
