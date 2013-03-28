@@ -54,12 +54,12 @@
 	path = .vim/bundle/command-t
 	url = git://git.wincent.com/command-t.git
    ignore = untracked
-[submodule "/Users/john/.vim/bundle/gundo"]
-	path = /Users/john/.vim/bundle/gundo
+[submodule ".vim/bundle/gundo"]
+	path = .vim/bundle/gundo
 	url = http://github.com/sjl/gundo.vim.git
    ignore = untracked
-[submodule "/Users/john/.vim/bundle/vim-color-solarized"]
-	path = /Users/john/.vim/bundle/vim-color-solarized
+[submodule ".vim/bundle/vim-color-solarized"]
+	path = .vim/bundle/vim-color-solarized
 	url = git://github.com/altercation/vim-colors-solarized.git
 [submodule ".vim/bundle/vim-coffee-script"]
 	path = .vim/bundle/vim-coffee-script

@@ -12,7 +12,7 @@ if [ -d "$HOME/bin" ] ; then
 fi
 
 export NODE_PATH=/usr/local/lib/node_modules
-export JAVA_HOME=$(/usr/libexec/java_home)
+#export JAVA_HOME=$(/usr/libexec/java_home)
 
 bindkey -v
 bindkey -M viins 'jj' vi-cmd-mode
@@ -39,10 +39,10 @@ precmd () {
    if [[ -z $(git ls-files --other --exclude-standard 2> /dev/null) ]] {
       zstyle ':vcs_info:*' formats $'%F{yellow}[%F{cyan}%r%F{blue}:%F{cyan}%b%c%u%F{yellow}]\n'
    } else {
-   zstyle ':vcs_info:*' formats $'%F{yellow}[%F{cyan}%r%F{blue}:%F{cyan}%b%c%u%F{red}●%F{yellow}]\n'
-}
+      zstyle ':vcs_info:*' formats $'%F{yellow}[%F{cyan}%r%F{blue}:%F{cyan}%b%c%u%F{red}●%F{yellow}]\n'
+   }
 
-vcs_info
+   vcs_info
 }
 setopt prompt_subst
 # normal user prompt
