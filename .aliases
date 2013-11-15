@@ -5,7 +5,6 @@ set_ls_alias=$(ls --color=auto -F 2>/dev/null)
 [ "$set_ls_alias" ] && alias ls='ls --color=auto -F'
 unset set_ls_alias
 
-alias emacs="/usr/local/Cellar/emacs/HEAD/Emacs.app/Contents/MacOS/Emacs -nw"
 alias tld='tail -f log/development.log'
 alias rsu='kill -HUP `cat tmp/pids/unicorn.pid`'
 alias stu='kill `cat tmp/pids/unicorn.pid`'

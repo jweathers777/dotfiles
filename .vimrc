@@ -2,8 +2,8 @@
 " Maintainer: John Weathers <jweathers@gmail.com>
 
 " Activate pathogen
-call pathogen#runtime_append_all_bundles()
-call pathogen#helptags()
+execute pathogen#infect()
+execute pathogen#infect('bundle.remote/{}')
 
 "We don't want the vi-compatible version
 set nocompatible
@@ -109,13 +109,6 @@ set listchars=tab:▸\ ,eol:¬
 let g:ghc="/usr/local/bin/ghc"
 let g:haddock_browser="/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome"
 
-" FuzzyFinder settings
-let g:fuf_file_exclude = '\v\~$|\.(o|exe|dll|bak|log|swp)$|(^|[/\\])(\.(hg|git|bzr)|target)($|[/\\])'
-let g:fuf_dir_exclude = '\v(^|[/\\])(\.(hg|git|bzr)|target)($|[/\\])'
-
-"map <leader>t :FufFile<CR>
-map <leader>b :FufBuffer<CR>
-"map <leader>g :FufTag<CR>
 map <leader>r :NERDTreeFind<CR>
 
 " Search via ack on the current word

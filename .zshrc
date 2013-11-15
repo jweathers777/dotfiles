@@ -12,7 +12,7 @@ if [ -d "$HOME/bin" ] ; then
 fi
 
 export NODE_PATH=/usr/local/lib/node_modules
-#export JAVA_HOME=$(/usr/libexec/java_home)
+export JAVA_HOME=$(/usr/libexec/java_home)
 
 bindkey -v
 bindkey -M viins 'jj' vi-cmd-mode
@@ -39,10 +39,10 @@ precmd () {
    if [[ -z $(git ls-files --other --exclude-standard 2> /dev/null) ]] {
       zstyle ':vcs_info:*' formats $'%F{yellow}[%F{cyan}%r%F{blue}:%F{cyan}%b%c%u%F{yellow}]\n'
    } else {
-      zstyle ':vcs_info:*' formats $'%F{yellow}[%F{cyan}%r%F{blue}:%F{cyan}%b%c%u%F{red}●%F{yellow}]\n'
-   }
+   zstyle ':vcs_info:*' formats $'%F{yellow}[%F{cyan}%r%F{blue}:%F{cyan}%b%c%u%F{red}●%F{yellow}]\n'
+}
 
-   vcs_info
+vcs_info
 }
 setopt prompt_subst
 # normal user prompt
@@ -83,36 +83,28 @@ my_accounts=(
 zstyle ':completion:*' hosts $hosts
 zstyle ':completion:*:my-accounts' users-hosts $my_accounts
 
+# Fix issues with searching in vi-mode
+
+vi-search-fix() {
+   zle vi-cmd-mode
+   zle .vi-history-search-backward
+}
+autoload vi-search-fix
+zle -N vi-search-fix
+bindkey -M viins '\e/' vi-search-fix
+
+# Add more vim like behavior
+
+bindkey "^?" backward-delete-char
+bindkey "^W" backward-kill-word 
+bindkey "^H" backward-delete-char      # Control-h also deletes the previous char
+bindkey "^U" kill-line   
+
 # -----------------------------------------------
 #  User-defined Functions
 # -----------------------------------------------
 
 kill_all() { kill `ps -e|grep "$1"|grep -v 'grep'|awk '{print $1;}'` }
-
-install_git_bundle() {
-   git submodule add $1 .vim/bundle/$2
-   echo "   ignore = untracked" >> .gitmodules
-   git add .
-   git commit -m "Install $2 bundle as submodule"
-}
-
-install_vim_bundle() {
-   mkdir -p ".vim/bundle/$2/$3"
-   wget "$1" -O ".vim/bundle/$2/$3/$2.vim"
-   git add .
-   git commit -m "Install $2 bundle"
-}
-
-install_zipped_bundle() {
-   mkdir ".vim/bundle/$2"
-   wget "$1" -O ".vim/bundle/$2/$2.zip"
-   cd ".vim/bundle/$2"
-   unzip "$2.zip"
-   cd ~
-   rm ".vim/bundle/$2/$2.zip"
-   git add .
-   git commit -m "Install $2 bundle"
-}
 
 _rake_does_task_list_need_generating () {
    if [ ! -f .rake_tasks ]; then return 0;
