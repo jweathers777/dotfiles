@@ -12,13 +12,4 @@ alias brk='bundle exec rake'
 alias brl='bundle exec rails'
 alias be='bundle exec'
 alias bo='bundle open'
-
-alias snd='bundle exec unicorn -p3000'
-alias snd2='bundle exec unicorn -p4000'
-#alias acc='bundle exec unicorn -c config/unicorn.rb -p3001'
-alias dsh='bundle exec unicorn -p3002'
-alias pub='bundle exec unicorn -p3003'
-alias tab='bundle exec unicorn -p3004'
-alias anl='bundle exec unicorn -p3005'
-
-.G='git --work-tree=/Users/johnweathers/ --git-dir=/Users/johnweathers/dotfiles.git'
+alias .G="git --work-tree=$HOME/ --git-dir=$HOME/dotfiles.git"
