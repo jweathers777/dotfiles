@@ -21,3 +21,4 @@ alias pub='bundle exec unicorn -p3003'
 alias tab='bundle exec unicorn -p3004'
 alias anl='bundle exec unicorn -p3005'
 
+.G='git --work-tree=/Users/johnweathers/ --git-dir=/Users/johnweathers/dotfiles.git'

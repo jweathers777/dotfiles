@@ -38,3 +38,6 @@
 	tool = fugitive
 [mergetool "fugitive"]
 	cmd = vim -f -c \"Gdiff\" \"$MERGED\"
+[user]
+	email = johnweathers@gmail.com
+	name = John Weathers
