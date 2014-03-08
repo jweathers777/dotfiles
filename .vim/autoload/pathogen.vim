@@ -1,1 +1,1 @@
-../pathogen/autoload/pathogen.vim
+../bundle.remote/pathogen/autoload/pathogen.vim
