@@ -1,81 +1,37 @@
-[coffee-script]
-source = http://github.com/kchmck/vim-coffee-script.git
+[Align]
+source = https://github.com/vim-scripts/Align.git
 type = git
 
-[ragtag]
-source = http://github.com/tpope/vim-ragtag.git
+[ZoomWin]
+source = https://github.com/vim-scripts/ZoomWin.git
 type = git
 
-[yankring]
-source = https://github.com/vim-scripts/YankRing.vim.git
+[a_vim]
+source = https://github.com/vim-scripts/a.vim.git
 type = git
 
-[jade]
-source = http://github.com/digitaltoad/vim-jade.git
-type = git
-
-[unimpaired]
-source = http://github.com/tpope/vim-unimpaired.git
-type = git
-
-[delimitMate]
-source = https://github.com/Raimondi/delimitMate.git
-type = git
-
-[buffergator]
-source = https://github.com/jeetsukumaran/vim-buffergator.git
-type = git
-
-[haml]
-source = http://github.com/tpope/vim-haml.git
+[ack]
+source = https://github.com/mileszs/ack.vim.git
 type = git
 
 [clang_complete]
 source = https://github.com/Rip-Rip/clang_complete.git
 type = git
 
-[scala]
-source = http://github.com/derekwyatt/vim-scala.git
-type = git
-
-[rails]
-source = http://github.com/tpope/vim-rails.git
-type = git
-
-[nerdcommenter]
-source = http://github.com/scrooloose/nerdcommenter.git
-type = git
-
-[nerdtree]
-source = http://github.com/scrooloose/nerdtree.git
-type = git
-
-[erlang]
-source = https://github.com/hcs42/vim-erlang
+[coffee-script]
+source = http://github.com/kchmck/vim-coffee-script.git
 type = git
 
 [ctrlp]
 source = https://github.com/kien/ctrlp.vim.git
 type = git
 
-[pathogen]
-source = https://github.com/tpope/vim-pathogen.git
+[delimitMate]
+source = https://github.com/Raimondi/delimitMate.git
 type = git
 
-[sbt]
-source = http://github.com/derekwyatt/vim-sbt.git
-type = git
-
-[Align]
-source = https://github.com/vim-scripts/Align.git
-type = git
-
-[fugitive]
-source = https://github.com/tpope/vim-fugitive.git
-type = git
-
-[ZoomWin]
-source = https://github.com/vim-scripts/ZoomWin.git
+[dirdiff]
+source = https://github.com/vim-scripts/DirDiff.vim.git
 type = git
 
 [elixir]
@@ -86,16 +42,60 @@ type = git
 source = https://github.com/tpope/vim-endwise.git
 type = git
 
-[a_vim]
-source = https://github.com/vim-scripts/a.vim.git
+[erlang]
+source = https://github.com/hcs42/vim-erlang
+type = git
+
+[fugitive]
+source = https://github.com/tpope/vim-fugitive.git
 type = git
 
 [gundo]
 source = http://github.com/sjl/gundo.vim.git
 type = git
 
-[ack]
-source = https://github.com/mileszs/ack.vim.git
+[haml]
+source = http://github.com/tpope/vim-haml.git
+type = git
+
+[htm5-syntax]
+source = https://github.com/othree/html5-syntax.vim.git
+type = git
+
+[jade]
+source = http://github.com/digitaltoad/vim-jade.git
+type = git
+
+[nerdcommenter]
+source = http://github.com/scrooloose/nerdcommenter.git
+type = git
+
+[nerdtree]
+source = http://github.com/scrooloose/nerdtree.git
+type = git
+
+[pathogen]
+source = https://github.com/tpope/vim-pathogen.git
+type = git
+
+[ragtag]
+source = http://github.com/tpope/vim-ragtag.git
+type = git
+
+[rails]
+source = http://github.com/tpope/vim-rails.git
+type = git
+
+[sbt]
+source = http://github.com/derekwyatt/vim-sbt.git
+type = git
+
+[scala]
+source = http://github.com/derekwyatt/vim-scala.git
+type = git
+
+[scss-syntax]
+source = https://github.com/cakebaker/scss-syntax.vim.git
 type = git
 
 [snipmate]
@@ -106,7 +106,31 @@ type = git
 source = http://github.com/tpope/vim-surround.git
 type = git
 
+[unimpaired]
+source = http://github.com/tpope/vim-unimpaired.git
+type = git
+
+[vim-go]
+source = https://github.com/fatih/vim-go
+type = git
+
+[vim-javascript]
+source = https://github.com/pangloss/vim-javascript
+type = git
+
+[vim-mustache-handlebars]
+source = https://github.com/mustache/vim-mustache-handlebars.git
+type = git
+
+[vim-slime]
+source = https://github.com/jpalardy/vim-slime.git
+type = git
+
 [vroom]
 source = https://github.com/skalnik/vim-vroom.git
+type = git
+
+[yankring]
+source = https://github.com/vim-scripts/YankRing.vim.git
 type = git
 

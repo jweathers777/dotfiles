@@ -1,4 +1,9 @@
+--follow
 --type-add=ruby=.haml,.sass,.builder,.ru
 --type-add=js=.coffee
 --type-add=sql=.pgsql
 --ignore-dir=data
+--ignore-dir=coverage
+--ignore-dir=log
+--ignore-dir=vendor
+--ignore-file=is:tags

@@ -5,6 +5,9 @@ setopt sharehistory
 setopt hist_ignore_all_dups
 setopt clobber
 
+# 10ms for key sequences
+KEYTIMEOUT=1
+
 export PATH=/usr/local/bin:/usr/local/sbin:$PATH
 # set PATH so it includes user's private bin if it exists
 if [ -d "$HOME/bin" ] ; then
@@ -130,8 +133,11 @@ compdef _rake rake
 # Import local environment
 [[ -s "$HOME/.localenv" ]] && . "$HOME/.localenv"
 
-# Import local environment
+# Import aliases
 [[ -s "$HOME/.aliases" ]] && . "$HOME/.aliases"
+
+# Import functions
+[[ -s "$HOME/.functions" ]] && . "$HOME/.functions"
 
 # Import rvm
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && export rvm_prefix="$HOME/." && . "$HOME/.rvm/scripts/rvm"
@@ -142,3 +148,6 @@ __rvm_project_rvmrc
 #  END
 # -----------------------------------------------
 
+
+### Added by the Heroku Toolbelt
+export PATH="$PATH:/usr/local/heroku/bin"

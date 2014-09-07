@@ -4,6 +4,7 @@
 " Activate pathogen
 execute pathogen#infect()
 execute pathogen#infect('bundle.remote/{}')
+execute pathogen#helptags()
 
 "We don't want the vi-compatible version
 set nocompatible
@@ -16,6 +17,9 @@ set showmatch
 
 " Make backspace key normal
 set bs=2
+
+" Highlight the current line
+set cursorline
 
 " We want to wrap long lines but we want
 " to show them intelligently
@@ -37,6 +41,11 @@ set cinoptions=:0,g0,(0,j1,p0,t0
 
 " Turn off the annoying bell sounds
 set vb t_vb=
+
+set iskeyword+=-
+
+" Eliminate pauses
+set timeoutlen=1000 ttimeoutlen=0
 
 " Force myself to use the right motion keys
 noremap <Up> <NOP>
@@ -96,8 +105,8 @@ set nofoldenable
 " XML Plugin settings
 let xml_use_xhtml=1
 
-let g:slimv_impl='clisp'
-let g:slimv_swank_cmd = '!osascript -e "tell application \"Terminal\" to do script \"clisp ~/.vim/bundles/slimv/slime/start-swank.lisp\""'
+" VIM-Slime settings
+let g:slime_target="tmux"
 
 " Shortcut to rapidly toggel `set list`
 nmap <leader>l :set list!<CR>
@@ -140,8 +149,40 @@ map <leader>lcd :lcd %:p:h<CR>
 
 map <leader>cp :let @+ = expand("%:p")<cr>
 
+" Mapping for edit/reloading vimrc file
+nmap <silent> <leader>ev :e $MYVIMRC<CR>
+nmap <silent> <leader>sv :so $MYVIMRC<CR>
+
 " Control-P mapping
-let g:ctrlp_map = ',t'
+map <leader>t :CtrlP<CR>
+map <leader>b :CtrlPBuffer<CR>
+map <leader>m :CtrlPMRU<CR>
+map <leader>. :CtrlPTag<CR>
+
+let g:ctrlp_user_command = 'ag %s -i --nocolor --nogroup --hidden
+      \ --ignore .git
+      \ --ignore .svn
+      \ --ignore .hg
+      \ --ignore .DS_Store
+      \ --ignore "**/*.min.js"
+      \ --ignore "**/*.min.css"
+      \ -g ""'
+let g:ackprg = 'ag --nocolor --nogroup --column
+      \ --ignore .git
+      \ --ignore .svn
+      \ --ignore .hg
+      \ --ignore .DS_Store
+      \ --ignore "**/*.min.js"
+      \ --ignore "**/*.min.css"'
+
+let g:ctrlp_max_files=0
+let g:ctrlp_follow_symlinks = 1
+let g:ctrlp_custom_ignore={
+   \ 'file': '\v(\.class|\.log)$',
+   \ 'rep': '\v[\/]\.(git|hg|svn)$',
+   \ 'dir': '\v[\/](tmp|coverage|data|log)$',
+   \ }
+"set wildignore+=*/.git/*,*.class,tmp/*,coverage/*
 
 " Control settings for python highlighting
 let python_highlight_all = 1
@@ -166,6 +207,8 @@ else
    colors default
 endif
 
+runtime macros/matchit.vim
+
 " Make windows use a sensible shell for vim
 "set shell=powershell
 
@@ -183,11 +226,12 @@ if has("autocmd")
       au!
 
       autocmd BufEnter Gemfile set filetype=ruby
-      autocmd FileType ruby,yaml,javascript,coffeescript,scala setlocal ts=2 sw=2
+      autocmd FileType ruby,yaml,jade,javascript,coffee,coffeescript,scala setlocal ts=2 sw=2
       autocmd FileType java setlocal ts=4 sw=4 tw=80
       autocmd FileType xml,xhtml,html,htm setlocal autoindent
       autocmd FileType xml,xhtml,html,htm let b:delimitMate_matchpairs="(:),{:},[:]"
-      au BufNewFile,BufRead SCons* set filetype=python
+      au BufRead,BufNewFile SCons* set filetype=python
+      au BufRead,BufNewFile *.hamlc set filetype=haml
 
       au FileType lisp let b:delimitMate_quotes="\""
 

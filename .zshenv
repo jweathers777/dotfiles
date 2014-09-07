@@ -11,6 +11,8 @@ export LSCOLORS=CxFxExDxBxegedabagacad
 
 export POW_WORKERS=4
 export JRUBY_OPTS="--1.9"
+export CLASSPATH=~/src/weka-3-7-10/weka.jar:~/src/ABAGAIL/ABAGAIL.jar:~/src/burlap/lib/\*:~/src/burlap/dist/burlap.jar
+export GOPATH=$HOME/go
 
 
 PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting

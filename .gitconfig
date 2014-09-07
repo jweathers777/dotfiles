@@ -18,9 +18,13 @@
 [push]
    default = tracking
 [alias]
+   al = config --get-regexp alias
    br = branch
+   brd = branch -d
    c  = commit
    co = checkout
+   cob = checkout -b
+   cos = "!f() { git checkout $(git branch | grep $1); }; f"
    cp = cherry-pick
    df = diff
    dh = diff HEAD
@@ -32,6 +36,10 @@
    lpo = log --pretty=oneline --abbrev-commit --graph --decorate
    st = status
    pub = "!f() { git push -u ${1:-origin} `git symbolic-ref HEAD`; }; f"
+   mt = mergetool
+   rbc = rebase --continue
+   rbs = rebase --skip
+
 [mergetool]
    keepBackup = false
 [merge]
@@ -41,3 +49,9 @@
 [user]
 	email = johnweathers@gmail.com
 	name = John Weathers
+[difftool "sourcetree"]
+	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
+	path = 
+[mergetool "sourcetree"]
+	cmd = /Applications/SourceTree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
+	trustExitCode = true
