@@ -92,10 +92,6 @@ inoremap jj <ESC>
 
 let mapleader = ","
 
-" Use ack instead of grep
-set grepprg=ack
-set grepformat=%f:%l:%m
-
 " Auto completion
 set complete+=k
 
@@ -153,27 +149,24 @@ map <leader>cp :let @+ = expand("%:p")<cr>
 nmap <silent> <leader>ev :e $MYVIMRC<CR>
 nmap <silent> <leader>sv :so $MYVIMRC<CR>
 
+" The Silver Searcher
+if executable('ag')
+  " Use ag over grep
+  set grepprg=ag\ --nogroup\ --nocolor
+  let g:ackprg = 'ag --nocolor --nogroup --column --ignore=*min.js --ignore=*min.css'
+
+  " Use ag in CtrlP for listing files. Lightning fast and respects .gitignore
+  let g:ctrlp_user_command = 'ag %s -l --nocolor --ignore=*min.js --ignore=*min.css -g ""'
+endif
+
+set grepformat=%f:%l:%m
+
 " Control-P mapping
 map <leader>t :CtrlP<CR>
 map <leader>b :CtrlPBuffer<CR>
 map <leader>m :CtrlPMRU<CR>
+map <leader>k :CtrlPClearCache<CR>
 map <leader>. :CtrlPTag<CR>
-
-let g:ctrlp_user_command = 'ag %s -i --nocolor --nogroup --hidden
-      \ --ignore .git
-      \ --ignore .svn
-      \ --ignore .hg
-      \ --ignore .DS_Store
-      \ --ignore "**/*.min.js"
-      \ --ignore "**/*.min.css"
-      \ -g ""'
-let g:ackprg = 'ag --nocolor --nogroup --column
-      \ --ignore .git
-      \ --ignore .svn
-      \ --ignore .hg
-      \ --ignore .DS_Store
-      \ --ignore "**/*.min.js"
-      \ --ignore "**/*.min.css"'
 
 let g:ctrlp_max_files=0
 let g:ctrlp_follow_symlinks = 1
@@ -182,6 +175,53 @@ let g:ctrlp_custom_ignore={
    \ 'rep': '\v[\/]\.(git|hg|svn)$',
    \ 'dir': '\v[\/](tmp|coverage|data|log)$',
    \ }
+
+if executable('matcher')
+   let g:ctrlp_match_func = { 'match': 'GoodMatch' }
+
+   function! GoodMatch(items, str, limit, mmode, ispath, crfile, regex)
+
+      " Create a cache file if not yet exists
+      let cachefile = ctrlp#utils#cachedir().'/matcher.cache'
+      if !( filereadable(cachefile) && a:items == readfile(cachefile) )
+         call writefile(a:items, cachefile)
+      endif
+      if !filereadable(cachefile)
+         return []
+      endif
+
+      " a:mmode is currently ignored. In the future, we should probably do
+      " something about that. the matcher behaves like "full-line".
+      let cmd = 'matcher --limit '.a:limit.' --manifest '.cachefile.' '
+      if !( exists('g:ctrlp_dotfiles') && g:ctrlp_dotfiles )
+         let cmd = cmd.'--no-dotfiles '
+      endif
+      let cmd = cmd.a:str
+
+      return split(system(cmd), "\n")
+
+   endfunction
+end
+
+" CtrlP auto cache clearing.
+" ----------------------------------------------------------------------------
+"function! SetupCtrlP()
+  "if exists("g:loaded_ctrlp") && g:loaded_ctrlp
+    "augroup CtrlPExtension
+      "autocmd!
+      ""autocmd FocusGained  * CtrlPClearCache
+      "autocmd BufWritePost * CtrlPClearCache
+    "augroup END
+  "endif
+"endfunction
+
+"if has("autocmd")
+  "autocmd VimEnter * :call SetupCtrlP()
+"endif
+
+" ag is fast enough that CtrlP doesn't need to cache
+let g:ctrlp_use_caching = 0
+
 "set wildignore+=*/.git/*,*.class,tmp/*,coverage/*
 
 " Control settings for python highlighting
@@ -226,7 +266,7 @@ if has("autocmd")
       au!
 
       autocmd BufEnter Gemfile set filetype=ruby
-      autocmd FileType ruby,yaml,jade,javascript,coffee,coffeescript,scala setlocal ts=2 sw=2
+      autocmd FileType ruby,yaml,jade,javascript,coffee,coffeescript,scala,html.handlebars setlocal ts=2 sw=2
       autocmd FileType java setlocal ts=4 sw=4 tw=80
       autocmd FileType xml,xhtml,html,htm setlocal autoindent
       autocmd FileType xml,xhtml,html,htm let b:delimitMate_matchpairs="(:),{:},[:]"
