@@ -1,7 +1,3 @@
-[Align]
-source = https://github.com/vim-scripts/Align.git
-type = git
-
 [ZoomWin]
 source = https://github.com/vim-scripts/ZoomWin.git
 type = git
@@ -78,6 +74,10 @@ type = git
 source = https://github.com/tpope/vim-pathogen.git
 type = git
 
+[qfenter]
+source = https://github.com/yssl/QFEnter.git
+type = git
+
 [ragtag]
 source = http://github.com/tpope/vim-ragtag.git
 type = git
@@ -92,6 +92,10 @@ type = git
 
 [scala]
 source = http://github.com/derekwyatt/vim-scala.git
+type = git
+
+[scratch]
+source = https://github.com/mtth/scratch.vim.git
 type = git
 
 [scss-syntax]
@@ -110,6 +114,10 @@ type = git
 source = http://github.com/tpope/vim-unimpaired.git
 type = git
 
+[vim-easy-align]
+source = https://github.com/junegunn/vim-easy-align.git
+type = git
+
 [vim-go]
 source = https://github.com/fatih/vim-go
 type = git
@@ -124,6 +132,10 @@ type = git
 
 [vim-slime]
 source = https://github.com/jpalardy/vim-slime.git
+type = git
+
+[vim-tmux-navigator]
+source = https://github.com/christoomey/vim-tmux-navigator.git
 type = git
 
 [vroom]
