@@ -26,7 +26,7 @@ set cursorline
 set wrap
 set cpoptions+=n
 set linebreak
-set showbreak=\ ↵\ \  
+set showbreak=\ ↵\ \
 
 " tab stop and shift width settings
 set tabstop=3
@@ -82,7 +82,7 @@ set mouse=a
 set selectmode=mouse
 
 " Which directory to use for the file browser
-set browsedir=current 
+set browsedir=current
 
 " Don't use Ex mode, use Q for formatting
 map Q gq
@@ -104,8 +104,8 @@ let xml_use_xhtml=1
 " VIM-Slime settings
 let g:slime_target="tmux"
 
-" Shortcut to rapidly toggle `set list`
-"nmap <leader>l :set list!<CR>
+" Shortcut to rapidly toggel `set list`
+nmap <leader>l :set list!<CR>
 
 " Use the same symbols as TextMate for tabstops and EOLs
 set listchars=tab:▸\ ,eol:¬
@@ -153,20 +153,34 @@ nmap <silent> <leader>sv :so $MYVIMRC<CR>
 if executable('ag')
   " Use ag over grep
   set grepprg=ag\ --nogroup\ --nocolor
-  let g:ackprg = 'ag --nocolor --nogroup --column --ignore=\*min.js --ignore=\*min.css'
+  "let g:ackprg = 'ag --nocolor --nogroup --column --ignore=*min.js --ignore=*min.css --ignore=public'
+  let g:ackprg = 'ag --nocolor --nogroup --column'
 
   " Use ag in CtrlP for listing files. Lightning fast and respects .gitignore
-  let g:ctrlp_user_command = 'ag %s -l --nocolor --ignore=\*min.js --ignore=\*min.css -g ""'
+  "let g:ctrlp_user_command = 'ag %s -l --nocolor --ignore=*min.js --ignore=*min.css --ignore=public  -g ""'
+  let g:ctrlp_user_command = 'ag %s -l -g ""'
 endif
 
 set grepformat=%f:%l:%m
 
+" Enable fzf
+set rtp+=/usr/local/opt/fzf
+map <leader>t :FZF<CR>
+
 " Control-P mapping
-map <leader>t :CtrlP<CR>
+"map <leader>t :CtrlP<CR>
 map <leader>b :CtrlPBuffer<CR>
 map <leader>m :CtrlPMRU<CR>
 map <leader>k :CtrlPClearCache<CR>
 map <leader>. :CtrlPTag<CR>
+
+" Disable some buffer gator keys
+let g:buffergator_suppress_keymaps=1
+map <leader>f :BuffergatorOpen<CR>
+map <leader>F :BuffergatorClose<CR>
+
+" Disable default mappings for scratch
+let g:scratch_no_mappings = 1
 
 let g:ctrlp_max_files=0
 let g:ctrlp_follow_symlinks = 1
@@ -264,13 +278,13 @@ if has("autocmd")
    " Put these in an autocmd group, so that we can delete them easily.
    augroup vimrcEx
       au!
-
+      autocmd BufWritePre * :%s/\s\+$//e
       autocmd BufEnter Gemfile set filetype=ruby
+      autocmd BufEnter .gitconfig_local set filetype=gitconfig
       autocmd FileType ruby,yaml,jade,javascript,coffee,coffeescript,scala,html.handlebars setlocal ts=2 sw=2
-      autocmd FileType tex setlocal tw=100
-      autocmd FileType java setlocal ts=4 sw=4 tw=80
-      autocmd FileType xml,xhtml,html,htm setlocal autoindent
-      autocmd FileType xml,xhtml,html,htm let b:delimitMate_matchpairs="(:),{:},[:]"
+      autocmd FileType java setlocal ts=2 sw=2 tw=100
+      autocmd FileType xml,xhtml,html,htm,html.handlebars setlocal autoindent
+      autocmd FileType xml,xhtml,html,htm,html.handlebars let b:delimitMate_matchpairs="(:),{:},[:]"
       au BufRead,BufNewFile SCons* set filetype=python
       au BufRead,BufNewFile *.hamlc set filetype=haml
 
@@ -287,7 +301,7 @@ if has("autocmd")
                \   exe "normal g`\"" |
                \ endif
 
-      au FilterWritePre * if &diff | set background=light | colorscheme peaksea | endif 
+      au FilterWritePre * if &diff | set background=light | colorscheme peaksea | endif
    augroup END
 
 else
