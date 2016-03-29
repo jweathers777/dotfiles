@@ -104,8 +104,8 @@ let xml_use_xhtml=1
 " VIM-Slime settings
 let g:slime_target="tmux"
 
-" Shortcut to rapidly toggel `set list`
-nmap <leader>l :set list!<CR>
+" Shortcut to rapidly toggle `set list`
+"nmap <leader>l :set list!<CR>
 
 " Use the same symbols as TextMate for tabstops and EOLs
 set listchars=tab:▸\ ,eol:¬
@@ -153,10 +153,10 @@ nmap <silent> <leader>sv :so $MYVIMRC<CR>
 if executable('ag')
   " Use ag over grep
   set grepprg=ag\ --nogroup\ --nocolor
-  let g:ackprg = 'ag --nocolor --nogroup --column --ignore=*min.js --ignore=*min.css'
+  let g:ackprg = 'ag --nocolor --nogroup --column --ignore=\*min.js --ignore=\*min.css'
 
   " Use ag in CtrlP for listing files. Lightning fast and respects .gitignore
-  let g:ctrlp_user_command = 'ag %s -l --nocolor --ignore=*min.js --ignore=*min.css -g ""'
+  let g:ctrlp_user_command = 'ag %s -l --nocolor --ignore=\*min.js --ignore=\*min.css -g ""'
 endif
 
 set grepformat=%f:%l:%m
@@ -267,6 +267,7 @@ if has("autocmd")
 
       autocmd BufEnter Gemfile set filetype=ruby
       autocmd FileType ruby,yaml,jade,javascript,coffee,coffeescript,scala,html.handlebars setlocal ts=2 sw=2
+      autocmd FileType tex setlocal tw=100
       autocmd FileType java setlocal ts=4 sw=4 tw=80
       autocmd FileType xml,xhtml,html,htm setlocal autoindent
       autocmd FileType xml,xhtml,html,htm let b:delimitMate_matchpairs="(:),{:},[:]"

@@ -138,11 +138,19 @@ type = git
 source = https://github.com/christoomey/vim-tmux-navigator.git
 type = git
 
+[vimtex]
+source = https://github.com/lervag/vimtex
+type = git
+
 [vroom]
 source = https://github.com/skalnik/vim-vroom.git
 type = git
 
 [yankring]
 source = https://github.com/vim-scripts/YankRing.vim.git
+type = git
+
+[ycm]
+source = https://github.com/Valloric/YouCompleteMe.git
 type = git
 
