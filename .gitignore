@@ -23,4 +23,5 @@
 !.zshrc
 !bin
 !bin/vcsc.py
+!cfg-install
 .Rproj.user
