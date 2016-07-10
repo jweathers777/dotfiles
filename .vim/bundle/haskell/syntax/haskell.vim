@@ -1,534 +1,260 @@
 " Vim syntax file
-" Language:     Haskell
-" Maintainer:   Rui Carlos A. Goncalves <rcgoncalves.pt@gmail.com>
-" 		Yang Zhang <treblih.divad@gmail.com>
-" Last Change:  July 31, 2010
 "
-" Version:      1.3
-" Url:          http://www.rcg-pt.net/programacao/haskell.vim.gz
+" Modification of vims Haskell syntax file:
+"   - match types using regular expression
+"   - highlight toplevel functions
+"   - use "syntax keyword" instead of "syntax match" where appropriate
+"   - functions and types in import and module declarations are matched
+"   - removed hs_highlight_more_types (just not needed anymore)
+"   - enable spell checking in comments and strings only
+"   - FFI highlighting
+"   - QuasiQuotation
+"   - top level Template Haskell slices
+"   - PackageImport
 "
-" Original Author: John Williams <jrw@pobox.com>
+" TODO: find out which vim versions are still supported
+"
+" From Original file:
+" ===================
+"
+" Language:		    Haskell
+" Maintainer:		Haskell Cafe mailinglist <haskell-cafe@haskell.org>
+" Last Change:		2010 Feb 21
+" Original Author:	John Williams <jrw@pobox.com>
+"
+" Thanks to Ryan Crumley for suggestions and John Meacham for
+" pointing out bugs. Also thanks to Ian Lynagh and Donald Bruce Stewart
+" for providing the inspiration for the inclusion of the handling
+" of C preprocessor directives, and for pointing out a bug in the
+" end-of-line comment handling.
+"
+" Options-assign a value to these variables to turn the option on:
+"
+" hs_highlight_delimiters - Highlight delimiter characters--users
+"			    with a light-colored background will
+"			    probably want to turn this on.
+" hs_highlight_boolean - Treat True and False as keywords.
+" hs_highlight_types - Treat names of primitive types as keywords.
+" hs_highlight_debug - Highlight names of debugging functions.
+" hs_allow_hash_operator - Don't highlight seemingly incorrect C
+"			   preprocessor directives but assume them to be
+"			   operators
+" 
+" 
 
-" Remove any old syntax stuff hanging around
 if version < 600
   syn clear
 elseif exists("b:current_syntax")
   finish
 endif
 
+"syntax sync fromstart "mmhhhh.... is this really ok to do so?
+syntax sync linebreaks=15 minlines=50 maxlines=500
+
+syn match  hsSpecialChar	contained "\\\([0-9]\+\|o[0-7]\+\|x[0-9a-fA-F]\+\|[\"\\'&\\abfnrtv]\|^[A-Z^_\[\\\]]\)"
+syn match  hsSpecialChar	contained "\\\(NUL\|SOH\|STX\|ETX\|EOT\|ENQ\|ACK\|BEL\|BS\|HT\|LF\|VT\|FF\|CR\|SO\|SI\|DLE\|DC1\|DC2\|DC3\|DC4\|NAK\|SYN\|ETB\|CAN\|EM\|SUB\|ESC\|FS\|GS\|RS\|US\|SP\|DEL\)"
+syn match  hsSpecialCharError	contained "\\&\|'''\+"
+sy region  hsString		start=+"+  skip=+\\\\\|\\"+  end=+"+  contains=hsSpecialChar,@Spell
+sy match   hsCharacter		"[^a-zA-Z0-9_']'\([^\\]\|\\[^']\+\|\\'\)'"lc=1 contains=hsSpecialChar,hsSpecialCharError
+sy match   hsCharacter		"^'\([^\\]\|\\[^']\+\|\\'\)'" contains=hsSpecialChar,hsSpecialCharError
 
 " (Qualified) identifiers (no default highlighting)
-syn match ConId         "\(\<[A-Z][a-zA-Z0-9_']*\.\)\=\<[A-Z][a-zA-Z0-9_']*\>"
-syn match VarId         "\(\<[A-Z][a-zA-Z0-9_']*\.\)\=\<[a-z][a-zA-Z0-9_']*\>"
-
+syn match ConId "\(\<[A-Z][a-zA-Z0-9_']*\.\)\=\<[A-Z][a-zA-Z0-9_']*\>"
+syn match VarId "\(\<[A-Z][a-zA-Z0-9_']*\.\)\=\<[a-z][a-zA-Z0-9_']*\>"
 
 " Infix operators--most punctuation characters and any (qualified) identifier
 " enclosed in `backquotes`. An operator starting with : is a constructor,
 " others are variables (e.g. functions).
-syn match hsVarSym      "\(\<[A-Z][a-zA-Z0-9_']*\.\)\=[-!#$%&\*\+/<=>\?@\\^|~.][-!#$%&\*\+/<=>\?@\\^|~:.]*"
-syn match hsConSym      "\(\<[A-Z][a-zA-Z0-9_']*\.\)\=:[-!#$%&\*\+./<=>\?@\\^|~:]*"
-syn match hsVarSym      "`\(\<[A-Z][a-zA-Z0-9_']*\.\)\=[a-z][a-zA-Z0-9_']*`"
-syn match hsConSym      "`\(\<[A-Z][a-zA-Z0-9_']*\.\)\=[A-Z][a-zA-Z0-9_']*`"
+syn match hsVarSym "\(\<[A-Z][a-zA-Z0-9_']*\.\)\=[-!#$%&\*\+/<=>\?@\\^|~.][-!#$%&\*\+/<=>\?@\\^|~:.]*"
+syn match hsConSym "\(\<[A-Z][a-zA-Z0-9_']*\.\)\=:[-!#$%&\*\+./<=>\?@\\^|~:]*"
+syn match hsVarSym "`\(\<[A-Z][a-zA-Z0-9_']*\.\)\=[a-z][a-zA-Z0-9_']*`"
+syn match hsConSym "`\(\<[A-Z][a-zA-Z0-9_']*\.\)\=[A-Z][a-zA-Z0-9_']*`"
 
+" Toplevel Template Haskell support
+"sy match hsTHTopLevel "^[a-z]\(\(.\&[^=]\)\|\(\n[^a-zA-Z0-9]\)\)*"
+sy match hsTHIDTopLevel "^[a-z]\S*" 
+sy match hsTHTopLevel "^\$(\?" nextgroup=hsTHTopLevelName 
+sy match hsTHTopLevelName "[a-z]\S*" contained
 
 " Reserved symbols--cannot be overloaded.
 syn match hsDelimiter  "(\|)\|\[\|\]\|,\|;\|_\|{\|}"
 
+sy region hsInnerParen start="(" end=")" contained contains=hsInnerParen,hsConSym,hsType,hsVarSym
+sy region hs_InfixOpFunctionName start="^(" end=")\s*[^:`]\(\W\&\S\&[^'\"`()[\]{}@]\)\+"re=s
+    \ contained keepend contains=hsInnerParen,hs_HlInfixOp
 
-" Strings and constants
-syn match   hsSpecialChar	contained "\\\([0-9]\+\|o[0-7]\+\|x[0-9a-fA-F]\+\|[\"\\'&\\abfnrtv]\|^[A-Z^_\[\\\]]\)"
-syn match   hsSpecialChar	contained "\\\(NUL\|SOH\|STX\|ETX\|EOT\|ENQ\|ACK\|BEL\|BS\|HT\|LF\|VT\|FF\|CR\|SO\|SI\|DLE\|DC1\|DC2\|DC3\|DC4\|NAK\|SYN\|ETB\|CAN\|EM\|SUB\|ESC\|FS\|GS\|RS\|US\|SP\|DEL\)"
-syn match   hsSpecialCharError	contained "\\&\|'''\+"
-syn region  hsString		start=+"+  skip=+\\\\\|\\"+  end=+"+  contains=hsSpecialChar
-syn match   hsCharacter		"[^a-zA-Z0-9_']'\([^\\]\|\\[^']\+\|\\'\)'"lc=1 contains=hsSpecialChar,hsSpecialCharError
-syn match   hsCharacter		"^'\([^\\]\|\\[^']\+\|\\'\)'" contains=hsSpecialChar,hsSpecialCharError
-syn match   hsNumber		"\<[0-9]\+\>\|\<0[xX][0-9a-fA-F]\+\>\|\<0[oO][0-7]\+\>"
-syn match   hsFloat		"\<[0-9]\+\.[0-9]\+\([eE][-+]\=[0-9]\+\)\=\>"
+sy match hs_hlFunctionName "[a-z_]\(\S\&[^,\(\)\[\]]\)*" contained 
+sy match hs_FunctionName "^[a-z_]\(\S\&[^,\(\)\[\]]\)*" contained contains=hs_hlFunctionName
+sy match hs_HighliteInfixFunctionName "`[a-z_][^`]*`" contained
+sy match hs_InfixFunctionName "^\S[^=]*`[a-z_][^`]*`"me=e-1 contained contains=hs_HighliteInfixFunctionName,hsType,hsConSym,hsVarSym,hsString,hsCharacter
+sy match hs_HlInfixOp "\(\W\&\S\&[^`(){}'[\]]\)\+" contained contains=hsString
+sy match hs_InfixOpFunctionName "^\(\(\w\|[[\]{}]\)\+\|\(\".*\"\)\|\('.*'\)\)\s*[^:]=*\(\W\&\S\&[^='\"`()[\]{}@]\)\+"
+    \ contained contains=hs_HlInfixOp,hsCharacter
 
+sy match hs_OpFunctionName        "(\(\W\&[^(),\"]\)\+)" contained
+"sy region hs_Function start="^["'a-z_([{]" end="=\(\s\|\n\|\w\|[([]\)" keepend extend
+sy region hs_Function start="^["'a-zA-Z_([{]\(\(.\&[^=]\)\|\(\n\s\)\)*=" end="\(\s\|\n\|\w\|[([]\)" 
+        \ contains=hs_OpFunctionName,hs_InfixOpFunctionName,hs_InfixFunctionName,hs_FunctionName,hsType,hsConSym,hsVarSym,hsString,hsCharacter
 
-" Keyword definitions. These must be patters instead of keywords
-" because otherwise they would match as keywords at the start of a
-" "literate" comment (see lhs.vim).
-syn match hsModule	"\<module\>"
-syn match hsImport	"\<import\>.*"he=s+6 contains=hsImportMod
-syn match hsImportMod	contained "\<\(as\|qualified\|hiding\)\>"
-syn match hsInfix	"\<\(infix\|infixl\|infixr\)\>"
-syn match hsStructure	"\<\(class\|data\|deriving\|instance\|default\|where\)\>"
-syn match hsTypedef	"\<\(type\|newtype\)\>"
-syn match hsStatement	"\<\(do\|return\|case\|of\|let\|in\)\>"
-syn match hsConditional	"\<\(if\|then\|else\)\>"
+sy match hs_DeclareFunction "^[a-z_(]\S*\(\s\|\n\)*::" contains=hs_FunctionName,hs_OpFunctionName
 
+" hi hs_InfixOpFunctionName guibg=bg
+" hi hs_Function guibg=green
+" hi hs_InfixFunctionName guibg=red
+" hi hs_DeclareFunction guibg=red
 
-" Types
-syn keyword hsType	Array
-syn keyword hsType	Bool BufferMode
-syn keyword hsType	CalendarTime Char ClockTime Complex Complex
-syn keyword hsType	Day Double
-syn keyword hsType	Either ExitCode
-syn keyword hsType	FilePath Float
-syn keyword hsType	Handle HandlePosn
-syn keyword hsType	Int Integer IO IOError IOMode
-syn keyword hsType	Maybe Month
-syn keyword hsType	Ordering
-syn keyword hsType	Permissions
-syn keyword hsType	Ratio Rational Rational Read ReadS
-syn keyword hsType	SeekMode Show ShowS StdGen String
-syn keyword hsType	TimeDiff  TimeLocale
+sy keyword hsStructure data family class where instance default deriving
+sy keyword hsTypedef type newtype
 
+sy keyword hsInfix infix infixl infixr
+sy keyword hsStatement  do case of let in
+sy keyword hsConditional if then else
 
-" Classes from the standard prelude
-syn keyword hsCls	Bounded
-syn keyword hsCls	Enum Eq
-syn keyword hsCls	Floating Fractional Functor
-syn keyword hsCls	Integral Ix
-syn keyword hsCls	Monad MonadPlus
-syn keyword hsCls	Num
-syn keyword hsCls	Ord
-syn keyword hsCls	Random RandomGen Read Real RealFloat RealFrac
-syn keyword hsCls	Show
+"if exists("hs_highlight_types")
+  " Primitive types from the standard prelude and libraries.
+  sy match hsType "\<[A-Z]\(\S\&[^,.]\)*\>"
+  sy match hsType "()"
+"endif
 
+" Not real keywords, but close.
+if exists("hs_highlight_boolean")
+  " Boolean constants from the standard prelude.
+  syn keyword hsBoolean True False
+endif
 
-" Functions 
-syn keyword hsFunc	abs
-syn keyword hsFunc	accum
-syn keyword hsFunc	accumArray
-syn keyword hsFunc	acos
-syn keyword hsFunc	acosh
-syn keyword hsFunc	addToClockTime
-syn keyword hsFunc	all
-syn keyword hsFunc	and
-syn keyword hsFunc	any
-syn keyword hsFunc	ap
-syn keyword hsFunc	appendFile
-syn keyword hsFunc	approxRational
-syn keyword hsFunc	array
-syn keyword hsFunc	asin
-syn keyword hsFunc	asinh
-syn keyword hsFunc	assocs
-syn keyword hsFunc	asTypeOf
-syn keyword hsFunc	atan
-syn keyword hsFunc	atan2
-syn keyword hsFunc	atanh
+syn region	hsPackageString	start=+L\="+ skip=+\\\\\|\\"\|\\$+ excludenl end=+"+ end='$' contains=cSpecial contained
+sy match   hsModuleName  excludenl "\([A-Z]\w*\.\?\)*" contained 
 
-syn keyword hsFunc	bounds
-syn keyword hsFunc	bracket
-syn keyword hsFunc	bracket_
-syn keyword hsFunc	break
+sy match hsImport "\<import\>\s\+\(qualified\s\+\)\?\(\<\(\w\|\.\)*\>\)" 
+    \ contains=hsModuleName,hsImportLabel
+    \ nextgroup=hsImportParams,hsImportIllegal skipwhite
+sy keyword hsImportLabel import qualified contained
 
-syn keyword hsFunc	calendarTimeToString
-syn keyword hsFunc	catch
-syn keyword hsFunc	catMaybes
-syn keyword hsFunc	ceiling
-syn keyword hsFunc	chr
-syn keyword hsFunc	cis
-syn keyword hsFunc	compare
-syn keyword hsFunc	concat
-syn keyword hsFunc	concatMap
-syn keyword hsFunc	conjugate
-syn keyword hsFunc	const
-syn keyword hsFunc	cos
-syn keyword hsFunc	cosh
-syn keyword hsFunc	cpuTimePrecision
-syn keyword hsFunc	createDirectory
-syn keyword hsFunc	curry
-syn keyword hsFunc	cycle
+sy match hsImportIllegal "\w\+" contained
 
-syn keyword hsFunc	decodeFloat
-syn keyword hsFunc	defaultTimeLocale
-syn keyword hsFunc	delete
-syn keyword hsFunc	deleteBy
-syn keyword hsFunc	denominator
-syn keyword hsFunc	diffClockTimes
-syn keyword hsFunc	digitToInt
-syn keyword hsFunc	div
-syn keyword hsFunc	divMod
-syn keyword hsFunc	doesDirectoryExist
-syn keyword hsFunc	doesFileExist
-syn keyword hsFunc	drop
-syn keyword hsFunc	dropWhile
+sy keyword hsAsLabel as contained
+sy keyword hsHidingLabel hiding contained
 
-syn keyword hsFunc	either
-syn keyword hsFunc	elem
-syn keyword hsFunc	elemIndex
-syn keyword hsFunc	elemIndices
-syn keyword hsFunc	elems
-syn keyword hsFunc	encodeFloat
-syn keyword hsFunc	enumFrom
-syn keyword hsFunc	enumFromThen
-syn keyword hsFunc	enumFromThenTo
-syn keyword hsFunc	enumFromTo
-syn keyword hsFunc	error
-syn keyword hsFunc	even
-syn keyword hsFunc	executable
-syn keyword hsFunc	exitFailure
-syn keyword hsFunc	exitWith
-syn keyword hsFunc	exp
-syn keyword hsFunc	exponent
+sy match hsImportParams "as\s\+\(\w\+\)" contained
+    \ contains=hsModuleName,hsAsLabel
+    \ nextgroup=hsImportParams,hsImportIllegal skipwhite
+sy match hsImportParams "hiding" contained
+    \ contains=hsHidingLabel
+    \ nextgroup=hsImportParams,hsImportIllegal skipwhite 
+sy region hsImportParams start="(" end=")" contained
+    \ contains=hsBlockComment,hsLineComment, hsType,hsDelimTypeExport,hs_hlFunctionName,hs_OpFunctionName
+    \ nextgroup=hsImportIllegal skipwhite
 
-syn keyword hsFunc	fail
-syn keyword hsFunc	filter
-syn keyword hsFunc	filterM
-syn keyword hsFunc	find
-syn keyword hsFunc	findIndex
-syn keyword hsFunc	findIndices
-syn keyword hsFunc	flip
-syn keyword hsFunc	floatDigits
-syn keyword hsFunc	floatRadix
-syn keyword hsFunc	floatRange
-syn keyword hsFunc	floatToDigits
-syn keyword hsFunc	floor
-syn keyword hsFunc	fmap
-syn keyword hsFunc	foldl
-syn keyword hsFunc	foldl1
-syn keyword hsFunc	foldM
-syn keyword hsFunc	foldr
-syn keyword hsFunc	foldr1
-syn keyword hsFunc	formatCalendarTime
-syn keyword hsFunc	fromEnum
-syn keyword hsFunc	fromInteger
-syn keyword hsFunc	fromIntegral
-syn keyword hsFunc	fromJust
-syn keyword hsFunc	fromMaybe
-syn keyword hsFunc	fromRat
-syn keyword hsFunc	fromRational
-syn keyword hsFunc	fst
+" hi hsImport guibg=red
+"hi hsImportParams guibg=bg
+"hi hsImportIllegal guibg=bg
+"hi hsModuleName guibg=bg
 
-syn keyword hsFunc	gcd
-syn keyword hsFunc	genericDrop
-syn keyword hsFunc	genericIndex
-syn keyword hsFunc	genericLength
-syn keyword hsFunc	genericReplicate
-syn keyword hsFunc	genericSplitAt
-syn keyword hsFunc	genericTake
-syn keyword hsFunc	getArgs
-syn keyword hsFunc	getChar
-syn keyword hsFunc	getClockTime
-syn keyword hsFunc	getContents
-syn keyword hsFunc	getCPUTime
-syn keyword hsFunc	getCurrentDirectory
-syn keyword hsFunc	getDirectoryContents
-syn keyword hsFunc	getEnv
-syn keyword hsFunc	getLine
-syn keyword hsFunc	getModificationTime
-syn keyword hsFunc	getPermissions
-syn keyword hsFunc	getProgName
-syn keyword hsFunc	getStdGen
-syn keyword hsFunc	getStdRandom
-syn keyword hsFunc	group
-syn keyword hsFunc	groupBy
-syn keyword hsFunc	guard
-
-syn keyword hsFunc	hClose
-syn keyword hsFunc	head
-syn keyword hsFunc	hFileSize
-syn keyword hsFunc	hFlush
-syn keyword hsFunc	hGetBuffering
-syn keyword hsFunc	hGetChar
-syn keyword hsFunc	hGetContents
-syn keyword hsFunc	hGetLine
-syn keyword hsFunc	hGetPosn
-syn keyword hsFunc	hIsClosed
-syn keyword hsFunc	hIsEOF
-syn keyword hsFunc	hIsOpen
-syn keyword hsFunc	hIsReadable
-syn keyword hsFunc	hIsSeekable
-syn keyword hsFunc	hIsWritable
-syn keyword hsFunc	hLookAhead
-syn keyword hsFunc	hPrint
-syn keyword hsFunc	hPutChar
-syn keyword hsFunc	hPutStr
-syn keyword hsFunc	hPutStrLn
-syn keyword hsFunc	hReady
-syn keyword hsFunc	hSeek
-syn keyword hsFunc	hSetBuffering
-syn keyword hsFunc	hSetPosn
-syn keyword hsFunc	hWaitForInput
-
-syn keyword hsFunc	id
-syn keyword hsFunc	imagPart
-syn keyword hsFunc	index
-syn keyword hsFunc	indices
-syn keyword hsFunc	init
-syn keyword hsFunc	inits
-syn keyword hsFunc	inRange
-syn keyword hsFunc	insert
-syn keyword hsFunc	insertBy
-syn keyword hsFunc	interact
-syn keyword hsFunc	intersect
-syn keyword hsFunc	intersectBy
-syn keyword hsFunc	intersperse
-syn keyword hsFunc	intToDigit
-syn keyword hsFunc	ioeGetErrorString
-syn keyword hsFunc	ioeGetFileName
-syn keyword hsFunc	ioeGetHandle
-syn keyword hsFunc	ioError
-syn keyword hsFunc	isAlpha
-syn keyword hsFunc	isAlphaNum
-syn keyword hsFunc	isAlreadyExistsError
-syn keyword hsFunc	isAlreadyInUseError
-syn keyword hsFunc	isAscii
-syn keyword hsFunc	isControl
-syn keyword hsFunc	isDenormalized
-syn keyword hsFunc	isDigit
-syn keyword hsFunc	isDoesNotExistError
-syn keyword hsFunc	isEOF
-syn keyword hsFunc	isEOFError
-syn keyword hsFunc	isFullError
-syn keyword hsFunc	isHexDigit
-syn keyword hsFunc	isIEEE
-syn keyword hsFunc	isIllegalOperation
-syn keyword hsFunc	isInfinite
-syn keyword hsFunc	isJust
-syn keyword hsFunc	isLatin1
-syn keyword hsFunc	isLower
-syn keyword hsFunc	isNaN
-syn keyword hsFunc	isNegativeZero
-syn keyword hsFunc	isNothing
-syn keyword hsFunc	isOctDigit
-syn keyword hsFunc	isPermissionError
-syn keyword hsFunc	isPrefixOf
-syn keyword hsFunc	isPrint
-syn keyword hsFunc	isSpace
-syn keyword hsFunc	isSuffixOf
-syn keyword hsFunc	isUpper
-syn keyword hsFunc	isUserError
-syn keyword hsFunc	iterate
-syn keyword hsFunc	ixmap
-
-syn keyword hsFunc	join
-
-syn keyword hsFunc	last
-syn keyword hsFunc	lcm
-syn keyword hsFunc	length
-syn keyword hsFunc	lex
-syn keyword hsFunc	lexDigits
-syn keyword hsFunc	lexLitChar
-syn keyword hsFunc	liftM
-syn keyword hsFunc	liftM2
-syn keyword hsFunc	liftM3
-syn keyword hsFunc	liftM4
-syn keyword hsFunc	liftM5
-syn keyword hsFunc	lines
-syn keyword hsFunc	listArray
-syn keyword hsFunc	listToMaybe
-syn keyword hsFunc	log
-syn keyword hsFunc	logBase
-syn keyword hsFunc	lookup
-
-syn keyword hsFunc	magnitude
-syn keyword hsFunc	map
-syn keyword hsFunc	mapAccumL
-syn keyword hsFunc	mapAccumR
-syn keyword hsFunc	mapAndUnzipM
-syn keyword hsFunc	mapM
-syn keyword hsFunc	mapM_
-syn keyword hsFunc	mapMaybe
-syn keyword hsFunc	max
-syn keyword hsFunc	maxBound
-syn keyword hsFunc	maximum
-syn keyword hsFunc	maximumBy
-syn keyword hsFunc	maybe
-syn keyword hsFunc	maybeToList
-syn keyword hsFunc	min
-syn keyword hsFunc	minBound
-syn keyword hsFunc	minimum
-syn keyword hsFunc	minimumBy
-syn keyword hsFunc	mkPolar
-syn keyword hsFunc	mkStdGen
-syn keyword hsFunc	mod
-syn keyword hsFunc	msum
-
-syn keyword hsFunc	negate
-syn keyword hsFunc	newStdGen
-syn keyword hsFunc	next
-syn keyword hsFunc	not
-syn keyword hsFunc	notElem
-syn keyword hsFunc	nub
-syn keyword hsFunc	nubBy
-syn keyword hsFunc	null
-syn keyword hsFunc	numerator
-
-syn keyword hsFunc	odd
-syn keyword hsFunc	openFile
-syn keyword hsFunc	or
-syn keyword hsFunc	ord
-syn keyword hsFunc	otherwise
-
-syn keyword hsFunc	partition
-syn keyword hsFunc	phase
-syn keyword hsFunc	pi
-syn keyword hsFunc	polar
-syn keyword hsFunc	pred
-syn keyword hsFunc	print
-syn keyword hsFunc	product
-syn keyword hsFunc	properFraction
-syn keyword hsFunc	putChar
-syn keyword hsFunc	putStr
-syn keyword hsFunc	putStrLn
-
-syn keyword hsFunc	quot
-syn keyword hsFunc	quotRem
-
-syn keyword hsFunc	random
-syn keyword hsFunc	randomIO
-syn keyword hsFunc	randomR
-syn keyword hsFunc	randomRIO
-syn keyword hsFunc	randomRs
-syn keyword hsFunc	randoms
-syn keyword hsFunc	range
-syn keyword hsFunc	rangeSize
-syn keyword hsFunc	read
-syn keyword hsFunc	readable
-syn keyword hsFunc	readDec
-syn keyword hsFunc	readFile
-syn keyword hsFunc	readFloat
-syn keyword hsFunc	readHex
-syn keyword hsFunc	readInt
-syn keyword hsFunc	readIO
-syn keyword hsFunc	readList
-syn keyword hsFunc	readLitChar
-syn keyword hsFunc	readLn
-syn keyword hsFunc	readOct
-syn keyword hsFunc	readParen
-syn keyword hsFunc	reads
-syn keyword hsFunc	readSigned
-syn keyword hsFunc	readsPrec
-syn keyword hsFunc	realPart
-syn keyword hsFunc	realToFrac
-syn keyword hsFunc	recip
-syn keyword hsFunc	rem
-syn keyword hsFunc	removeDirectory
-syn keyword hsFunc	removeFile
-syn keyword hsFunc	renameDirectory
-syn keyword hsFunc	renameFile
-syn keyword hsFunc	repeat
-syn keyword hsFunc	replicate
-syn keyword hsFunc	return
-syn keyword hsFunc	reverse
-syn keyword hsFunc	round
-
-syn keyword hsFunc	scaleFloat
-syn keyword hsFunc	scanl
-syn keyword hsFunc	scanl1
-syn keyword hsFunc	scanr
-syn keyword hsFunc	scanr1
-syn keyword hsFunc	searchable
-syn keyword hsFunc	seq
-syn keyword hsFunc	sequence
-syn keyword hsFunc	sequence_
-syn keyword hsFunc	setCurrentDirectory
-syn keyword hsFunc	setPermissions
-syn keyword hsFunc	setStdGen
-syn keyword hsFunc	show
-syn keyword hsFunc	showChar
-syn keyword hsFunc	showEFloat
-syn keyword hsFunc	showFFloat
-syn keyword hsFunc	showFloat
-syn keyword hsFunc	showGFloat
-syn keyword hsFunc	showInt
-syn keyword hsFunc	showList
-syn keyword hsFunc	showLitChar
-syn keyword hsFunc	showParen
-syn keyword hsFunc	shows
-syn keyword hsFunc	showSigned
-syn keyword hsFunc	showsPrec
-syn keyword hsFunc	showString
-syn keyword hsFunc	significand
-syn keyword hsFunc	signum
-syn keyword hsFunc	sin
-syn keyword hsFunc	sinh
-syn keyword hsFunc	snd
-syn keyword hsFunc	sort
-syn keyword hsFunc	sortBy
-syn keyword hsFunc	split
-syn keyword hsFunc	splitAt
-syn keyword hsFunc	sqrt
-syn keyword hsFunc	stderr
-syn keyword hsFunc	stdin
-syn keyword hsFunc	stdout
-syn keyword hsFunc	subtract
-syn keyword hsFunc	succ
-syn keyword hsFunc	sum
-syn keyword hsFunc	system
-
-syn keyword hsFunc	tail
-syn keyword hsFunc	tails
-syn keyword hsFunc	take
-syn keyword hsFunc	takeWhile
-syn keyword hsFunc	tan
-syn keyword hsFunc	tanh
-syn keyword hsFunc	toCalendarTime
-syn keyword hsFunc	toClockTime
-syn keyword hsFunc	toEnum
-syn keyword hsFunc	toInteger
-syn keyword hsFunc	toLower
-syn keyword hsFunc	toRational
-syn keyword hsFunc	toUpper
-syn keyword hsFunc	toUTCTime
-syn keyword hsFunc	transpose
-syn keyword hsFunc	truncate
-syn keyword hsFunc	try
-
-syn keyword hsFunc	uncurry
-syn keyword hsFunc	undefined
-syn keyword hsFunc	unfoldr
-syn keyword hsFunc	union
-syn keyword hsFunc	unionBy
-syn keyword hsFunc	unless
-syn keyword hsFunc	unlines
-syn keyword hsFunc	until
-syn keyword hsFunc	unwords
-syn keyword hsFunc	unzip
-syn keyword hsFunc	unzip3
-syn keyword hsFunc	unzip4
-syn keyword hsFunc	unzip5
-syn keyword hsFunc	unzip6
-syn keyword hsFunc	unzip7
-syn keyword hsFunc	userError
-
-syn keyword hsFunc	when
-syn keyword hsFunc	words
-syn keyword hsFunc	writable
-syn keyword hsFunc	writeFile
-
-syn keyword hsFunc	zip
-syn keyword hsFunc	zip3
-syn keyword hsFunc	zip4
-syn keyword hsFunc	zip5
-syn keyword hsFunc	zip6
-syn keyword hsFunc	zip7
-syn keyword hsFunc	zipWith
-syn keyword hsFunc	zipWith3
-syn keyword hsFunc	zipWith4
-syn keyword hsFunc	zipWith5
-syn keyword hsFunc	zipWith6
-syn keyword hsFunc	zipWith7
-syn keyword hsFunc	zipWithM
-syn keyword hsFunc	zipWithM_
+"sy match hsImport		"\<import\>\(.\|[^(]\)*\((.*)\)\?" 
+"         \ contains=hsPackageString,hsImportLabel,hsImportMod,hsModuleName,hsImportList
+"sy keyword hsImportLabel import contained
+"sy keyword hsImportMod		as qualified hiding contained
+"sy region hsImportListInner start="(" end=")" contained keepend extend contains=hs_OpFunctionName
+"sy region  hsImportList matchgroup=hsImportListParens start="("rs=s+1 end=")"re=e-1
+"        \ contained 
+"        \ keepend extend
+"        \ contains=hsType,hsLineComment,hsBlockComment,hs_hlFunctionName,hsImportListInner
 
 
-" Constants 
-syn match hsBoolean     "\<\(True\|False\)\>"
-syn match hsMaybe       "\<\(Nothing\|Just\)\>"
-syn match hsConstant    "\<\(Left\|Right\)\>"
-syn match hsOrdering    "\<\(LT\|EQ\|GT\)\>"
 
+" new module highlighting
+syn region hsDelimTypeExport start="\<[A-Z]\(\S\&[^,.]\)*\>(" end=")" contained
+   \ contains=hsType
+
+sy keyword hsExportModuleLabel module contained
+sy match hsExportModule "\<module\>\(\s\|\t\|\n\)*\([A-Z]\w*\.\?\)*" contained contains=hsExportModuleLabel,hsModuleName
+
+sy keyword hsModuleStartLabel module contained
+sy keyword hsModuleWhereLabel where contained
+
+syn match hsModuleStart "^module\(\s\|\n\)*\(\<\(\w\|\.\)*\>\)\(\s\|\n\)*" 
+  \ contains=hsModuleStartLabel,hsModuleName
+  \ nextgroup=hsModuleCommentA,hsModuleExports,hsModuleWhereLabel
+
+syn region hsModuleCommentA start="{-" end="-}"
+  \ contains=hsModuleCommentA,hsCommentTodo,@Spell contained
+  \ nextgroup=hsModuleCommentA,hsModuleExports,hsModuleWhereLabel skipwhite skipnl
+
+syn match hsModuleCommentA "--.*\n"
+  \ contains=hsCommentTodo,@Spell contained
+  \ nextgroup=hsModuleCommentA,hsModuleExports,hsModuleWhereLabel skipwhite skipnl
+
+syn region hsModuleExports start="(" end=")" contained
+   \ nextgroup=hsModuleCommentB,hsModuleWhereLabel skipwhite skipnl
+   \ contains=hsBlockComment,hsLineComment,hsType,hsDelimTypeExport,hs_hlFunctionName,hs_OpFunctionName,hsExportModule
+
+syn match hsModuleCommentB "--.*\n"
+  \ contains=hsCommentTodo,@Spell contained
+  \ nextgroup=hsModuleCommentB,hsModuleWhereLabel skipwhite skipnl
+
+syn region hsModuleCommentB start="{-" end="-}"
+   \ contains=hsModuleCommentB,hsCommentTodo,@Spell contained
+   \ nextgroup=hsModuleCommentB,hsModuleWhereLabel skipwhite skipnl
+" end module highlighting
+
+" FFI support
+sy keyword hsFFIForeign foreign contained
+"sy keyword hsFFIImportExport import export contained
+sy keyword hsFFIImportExport export contained
+sy keyword hsFFICallConvention ccall stdcall contained
+sy keyword hsFFISafety safe unsafe contained
+sy region  hsFFIString		start=+"+  skip=+\\\\\|\\"+  end=+"+  contained contains=hsSpecialChar
+sy match hsFFI excludenl "\<foreign\>\(.\&[^\"]\)*\"\(.\)*\"\(\s\|\n\)*\(.\)*::"
+  \ keepend
+  \ contains=hsFFIForeign,hsFFIImportExport,hsFFICallConvention,hsFFISafety,hsFFIString,hs_OpFunctionName,hs_hlFunctionName
+
+
+sy match   hsNumber		"\<[0-9]\+\>\|\<0[xX][0-9a-fA-F]\+\>\|\<0[oO][0-7]\+\>"
+sy match   hsFloat		"\<[0-9]\+\.[0-9]\+\([eE][-+]\=[0-9]\+\)\=\>"
 
 " Comments
-syn match   hsLineComment      "--.*"
-syn region  hsBlockComment     start="{-"  end="-}" contains=hsBlockComment
-syn region  hsPragma	       start="{-#" end="#-}"
+sy keyword hsCommentTodo    TODO FIXME XXX TBD contained
+sy match   hsLineComment      "---*\([^-!#$%&\*\+./<=>\?@\\^|~].*\)\?$" contains=hsCommentTodo,@Spell
+sy region  hsBlockComment     start="{-"  end="-}" contains=hsBlockComment,hsCommentTodo,@Spell
+sy region  hsPragma	       start="{-#" end="#-}"
 
-" Literate comments--any line not starting with '>' is a comment.
-if exists("b:hs_literate_comments")
-  syn region  hsLiterateComment   start="^" end="^>"
+" QuasiQuotation
+sy region hsQQ start="\[\$" end="|\]"me=e-2 keepend contains=hsQQVarID,hsQQContent nextgroup=hsQQEnd
+sy region hsQQNew start="\[\(.\&[^|]\&\S\)*|" end="|\]"me=e-2 keepend contains=hsQQVarIDNew,hsQQContent nextgroup=hsQQEnd
+sy match hsQQContent ".*" contained
+sy match hsQQEnd "|\]" contained
+sy match hsQQVarID "\[\$\(.\&[^|]\)*|" contained
+sy match hsQQVarIDNew "\[\(.\&[^|]\)*|" contained
+
+if exists("hs_highlight_debug")
+  " Debugging functions from the standard prelude.
+  syn keyword hsDebug undefined error trace
 endif
 
 
-if !exists("hs_minlines")
-  let hs_minlines = 50
+" C Preprocessor directives. Shamelessly ripped from c.vim and trimmed
+" First, see whether to flag directive-like lines or not
+if (!exists("hs_allow_hash_operator"))
+    syn match	cError		display "^\s*\(%:\|#\).*$"
 endif
-exec "syn sync lines=" . hs_minlines
+" Accept %: for # (C99)
+syn region	cPreCondit	start="^\s*\(%:\|#\)\s*\(if\|ifdef\|ifndef\|elif\)\>" skip="\\$" end="$" end="//"me=s-1 contains=cComment,cCppString,cCommentError
+syn match	cPreCondit	display "^\s*\(%:\|#\)\s*\(else\|endif\)\>"
+syn region	cCppOut		start="^\s*\(%:\|#\)\s*if\s\+0\+\>" end=".\@=\|$" contains=cCppOut2
+syn region	cCppOut2	contained start="0" end="^\s*\(%:\|#\)\s*\(endif\>\|else\>\|elif\>\)" contains=cCppSkip
+syn region	cCppSkip	contained start="^\s*\(%:\|#\)\s*\(if\>\|ifdef\>\|ifndef\>\)" skip="\\$" end="^\s*\(%:\|#\)\s*endif\>" contains=cCppSkip
+syn region	cIncluded	display contained start=+"+ skip=+\\\\\|\\"+ end=+"+
+syn match	cIncluded	display contained "<[^>]*>"
+syn match	cInclude	display "^\s*\(%:\|#\)\s*include\>\s*["<]" contains=cIncluded
+syn cluster	cPreProcGroup	contains=cPreCondit,cIncluded,cInclude,cDefine,cCppOut,cCppOut2,cCppSkip,cCommentStartError
+syn region	cDefine		matchgroup=cPreCondit start="^\s*\(%:\|#\)\s*\(define\|undef\)\>" skip="\\$" end="$"
+syn region	cPreProc	matchgroup=cPreCondit start="^\s*\(%:\|#\)\s*\(pragma\>\|line\>\|warning\>\|warn\>\|error\>\)" skip="\\$" end="$" keepend
+
+syn region	cComment	matchgroup=cCommentStart start="/\*" end="\*/" contains=cCommentStartError,cSpaceError contained
+syntax match	cCommentError	display "\*/" contained
+syntax match	cCommentStartError display "/\*"me=e-1 contained
+syn region	cCppString	start=+L\="+ skip=+\\\\\|\\"\|\\$+ excludenl end=+"+ end='$' contains=cSpecial contained
+
 
 if version >= 508 || !exists("did_hs_syntax_inits")
   if version < 508
@@ -538,38 +264,89 @@ if version >= 508 || !exists("did_hs_syntax_inits")
     command -nargs=+ HiLink hi def link <args>
   endif
 
-  hi link hsModule              hsStructure
-  hi link hsImport              Include
-  hi link hsImportMod           hsImport
-  hi link hsInfix               PreProc
-  hi link hsStructure           Structure
-  hi link hsStatement           Statement
-  hi link hsConditional         Conditional
-  hi link hsSpecialChar	        SpecialChar
-  hi link hsTypedef             Typedef
-  hi link hsVarSym              hsOperator
-  hi link hsConSym              hsOperator
-  hi link hsOperator            Operator
-  hi link hsSpecialCharError    Error
-  hi link hsString              String
-  hi link hsCharacter           Character
-  hi link hsNumber              Number
-  hi link hsFloat               Float
-  hi link hsConditional         Conditional
-  hi link hsLiterateComment     hsComment
-  hi link hsBlockComment        hsComment
-  hi link hsLineComment         hsComment
-  hi link hsComment             Comment
-  hi link hsPragma              SpecialComment
-  hi link hsBoolean             Boolean
-  hi link hsType                Type
-  hi link hsFunc            	Function
-  hi link hsMaybe               hsEnumConst
-  hi link hsOrdering            hsEnumConst
-  hi link hsEnumConst           Constant
-  hi link hsConstant            Constant
-  hi link hsDebug               Debug
-  hi link hsCls                 Debug
+  HiLink hs_hlFunctionName    Function
+  HiLink hs_HighliteInfixFunctionName Function
+  HiLink hs_HlInfixOp       Function
+  HiLink hs_OpFunctionName  Function
+  HiLink hsTypedef          Typedef
+  HiLink hsVarSym           hsOperator
+  HiLink hsConSym           hsOperator
+  if exists("hs_highlight_delimiters")
+    " Some people find this highlighting distracting.
+	HiLink hsDelimiter        Delimiter
+  endif
+
+  HiLink hsModuleStartLabel Structure
+  HiLink hsExportModuleLabel Keyword
+  HiLink hsModuleWhereLabel Structure
+  HiLink hsModuleName       Normal
+  
+  HiLink hsImportIllegal    Error
+  HiLink hsAsLabel          hsImportLabel
+  HiLink hsHidingLabel      hsImportLabel
+  HiLink hsImportLabel      Include
+  HiLink hsImportMod        Include
+  HiLink hsPackageString    hsString
+
+  HiLink hsOperator         Operator
+
+  HiLink hsInfix            Keyword
+  HiLink hsStructure        Structure
+  HiLink hsStatement        Statement
+  HiLink hsConditional      Conditional
+
+  HiLink hsSpecialCharError Error
+  HiLink hsSpecialChar      SpecialChar
+  HiLink hsString           String
+  HiLink hsFFIString        String
+  HiLink hsCharacter        Character
+  HiLink hsNumber           Number
+  HiLink hsFloat            Float
+
+  HiLink hsLiterateComment		  hsComment
+  HiLink hsBlockComment     hsComment
+  HiLink hsLineComment      hsComment
+  HiLink hsModuleCommentA   hsComment
+  HiLink hsModuleCommentB   hsComment
+  HiLink hsComment          Comment
+  HiLink hsCommentTodo      Todo
+  HiLink hsPragma           SpecialComment
+  HiLink hsBoolean			  Boolean
+
+  if exists("hs_highlight_types")
+      HiLink hsDelimTypeExport  hsType
+      HiLink hsType             Type
+  endif
+
+  HiLink hsDebug            Debug
+
+  HiLink cCppString         hsString
+  HiLink cCommentStart      hsComment
+  HiLink cCommentError      hsError
+  HiLink cCommentStartError hsError
+  HiLink cInclude           Include
+  HiLink cPreProc           PreProc
+  HiLink cDefine            Macro
+  HiLink cIncluded          hsString
+  HiLink cError             Error
+  HiLink cPreCondit         PreCondit
+  HiLink cComment           Comment
+  HiLink cCppSkip           cCppOut
+  HiLink cCppOut2           cCppOut
+  HiLink cCppOut            Comment
+
+  HiLink hsFFIForeign       Keyword
+  HiLink hsFFIImportExport  Structure
+  HiLink hsFFICallConvention Keyword
+  HiLink hsFFISafety         Keyword
+
+  HiLink hsTHIDTopLevel   Macro
+  HiLink hsTHTopLevelName Macro
+
+  HiLink hsQQVarID Keyword
+  HiLink hsQQVarIDNew Keyword
+  HiLink hsQQEnd   Keyword
+  HiLink hsQQContent String
 
   delcommand HiLink
 endif

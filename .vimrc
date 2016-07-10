@@ -103,6 +103,7 @@ let xml_use_xhtml=1
 
 " VIM-Slime settings
 let g:slime_target="tmux"
+let g:slime_paste_file = tempname()
 
 " Shortcut to rapidly toggel `set list`
 nmap <leader>l :set list!<CR>
@@ -242,6 +243,31 @@ let g:ctrlp_use_caching = 0
 let python_highlight_all = 1
 let python_slow_sync = 1
 
+" Control haskell syntastic settings
+map <Leader>s :SyntasticToggleMode<CR>
+
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
+
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 0
+let g:syntastic_check_on_open = 0
+let g:syntastic_check_on_wq = 0
+
+" Control supertab settings for haskell
+"let g:SuperTabDefaultCompletionType = '<c-x><c-o>'
+
+"if has("gui_running")
+   "imap <c-space> <c-r>=SuperTabAlternateCompletion("\<lt>c-x>\<lt>c-o>")<cr>
+"else " no gui
+   "if has("unix")
+      "inoremap <Nul> <c-r>=SuperTabAlternateCompletion("\<lt>c-x>\<lt>c-o>")<cr>
+   "endif
+"endif
+"let g:haskellmode_completion_ghc = 1
+"autocmd FileType haskell setlocal omnifunc=necoghc#omnifunc
+
 " Switch syntax highlighting on, when the terminal has colors
 " Also switch on highlighting the last used search pattern.
 if &t_Co > 2 || has("gui_running")
@@ -281,10 +307,11 @@ if has("autocmd")
       autocmd BufWritePre * :%s/\s\+$//e
       autocmd BufEnter Gemfile set filetype=ruby
       autocmd BufEnter .gitconfig_local set filetype=gitconfig
-      autocmd FileType ruby,yaml,jade,javascript,coffee,coffeescript,scala,html.handlebars setlocal ts=2 sw=2
+      autocmd FileType haskell,ruby,yaml,jade,javascript,coffee,coffeescript,scala,html.handlebars setlocal ts=2 sw=2
       autocmd FileType java setlocal ts=2 sw=2 tw=100
       autocmd FileType xml,xhtml,html,htm,html.handlebars setlocal autoindent
       autocmd FileType xml,xhtml,html,htm,html.handlebars let b:delimitMate_matchpairs="(:),{:},[:]"
+      autocmd BufRead,BufNewFile Cargo.toml,Cargo.lock,*.rs compiler cargo
       au BufRead,BufNewFile SCons* set filetype=python
       au BufRead,BufNewFile *.hamlc set filetype=haml
 
@@ -312,7 +339,7 @@ endif " has("autocmd")
 
 set diffopt=filler,context:17,iwhite
 set diffexpr=MyDiff()
-function MyDiff()
+function! MyDiff()
    let opt = ''
    if &diffopt =~ 'icase' | let opt = opt . '-i ' | endif
    if &diffopt =~ 'iwhite' | let opt = opt . '-b ' | endif

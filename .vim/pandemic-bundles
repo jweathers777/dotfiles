@@ -46,6 +46,10 @@ type = git
 source = https://github.com/tpope/vim-fugitive.git
 type = git
 
+[ghcmod-vim]
+source = https://github.com/eagletmt/ghcmod-vim.git
+type = git
+
 [gundo]
 source = http://github.com/sjl/gundo.vim.git
 type = git
@@ -54,12 +58,20 @@ type = git
 source = http://github.com/tpope/vim-haml.git
 type = git
 
+[haskell-indent]
+source = https://github.com/itchyny/vim-haskell-indent.git
+type = git
+
 [htm5-syntax]
 source = https://github.com/othree/html5-syntax.vim.git
 type = git
 
 [jade]
 source = http://github.com/digitaltoad/vim-jade.git
+type = git
+
+[neco-ghc]
+source = https://github.com/eagletmt/neco-ghc
 type = git
 
 [nerdcommenter]
@@ -110,6 +122,14 @@ type = git
 source = http://github.com/tpope/vim-surround.git
 type = git
 
+[syntastic]
+source = https://github.com/scrooloose/syntastic.git
+type = git
+
+[toml]
+source = https://github.com/cespare/vim-toml.git
+type = git
+
 [unimpaired]
 source = http://github.com/tpope/vim-unimpaired.git
 type = git
@@ -136,6 +156,10 @@ type = git
 
 [vim-tmux-navigator]
 source = https://github.com/christoomey/vim-tmux-navigator.git
+type = git
+
+[vimproc]
+source = https://github.com/Shougo/vimproc.vim.git
 type = git
 
 [vimtex]
