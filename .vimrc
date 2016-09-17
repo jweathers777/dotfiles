@@ -1,6 +1,33 @@
 " John's Personal VIM settings
 " Maintainer: John Weathers <jweathers@gmail.com>
 
+" vim plugins
+call plug#begin('~/.vim/plugged')
+Plug 'junegunn/fzf'
+Plug 'tpope/vim-fugitive'
+Plug 'kchmck/vim-coffee-script'
+Plug 'hcs42/vim-erlang'
+Plug 'vim-scripts/ZoomWin'
+Plug 'elixir-lang/vim-elixir'
+Plug 'sjl/gundo.vim'
+Plug 'tpope/vim-haml'
+Plug 'itchyny/vim-haskell-indent'
+Plug 'scrooloose/nerdcommenter'
+Plug 'scrooloose/nerdtree'
+Plug 'tpope/vim-rails'
+Plug 'https://github.com/rust-lang/rust.vim'
+Plug 'tpope/vim-surround'
+Plug 'cespare/vim-toml'
+Plug 'junegunn/vim-easy-align'
+Plug 'fatih/vim-go'
+Plug 'pangloss/vim-javascript'
+Plug 'mustache/vim-mustache-handlebars'
+Plug 'christoomey/vim-tmux-navigator'
+Plug 'lervag/vimtex'
+Plug 'flazz/vim-colorschemes'
+Plug 'elmcast/elm-vim'
+call plug#end()
+
 "We don't want the vi-compatible version
 set nocompatible
 
@@ -208,13 +235,16 @@ if $TERM == 'screen'
    set t_Co=256
 endif
 
-if &t_Co >= 256
-   set background=dark
-   colors idlefingers256
-else
-   set background=dark
-   colors default
-endif
+let base16colorspace=256
+set background=dark
+colors base16-ir-black
+"if &t_Co >= 256
+   "set background=dark
+   "colors idlefingers256
+"else
+   "set background=dark
+   "colors default
+"endif
 
 " Make windows use a sensible shell for vim
 "set shell=powershell
