@@ -19,5 +19,5 @@ export GOROOT=$(brew --prefix)/Cellar/go/$GOVERSION/libexec
 export FZF_DEFAULT_COMMAND='ag -g ""'
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 
-PATH=$PATH:$HOME/.local/bin
+PATH=$PATH:$HOME/.local/bin:$HOME/.cargo/bin:$HOME/.node/bin
 PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting

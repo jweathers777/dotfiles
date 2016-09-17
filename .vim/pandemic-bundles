@@ -98,6 +98,10 @@ type = git
 source = http://github.com/tpope/vim-rails.git
 type = git
 
+[rust]
+source = https://github.com/rust-lang/rust.vim.git
+type = git
+
 [sbt]
 source = http://github.com/derekwyatt/vim-sbt.git
 type = git
@@ -120,10 +124,6 @@ type = git
 
 [surround]
 source = http://github.com/tpope/vim-surround.git
-type = git
-
-[syntastic]
-source = https://github.com/scrooloose/syntastic.git
 type = git
 
 [toml]
@@ -170,11 +170,11 @@ type = git
 source = https://github.com/skalnik/vim-vroom.git
 type = git
 
-[yankring]
-source = https://github.com/vim-scripts/YankRing.vim.git
+[webapi]
+source = https://github.com/mattn/webapi-vim.git
 type = git
 
-[ycm]
-source = https://github.com/Valloric/YouCompleteMe.git
+[yankring]
+source = https://github.com/vim-scripts/YankRing.vim.git
 type = git
 
