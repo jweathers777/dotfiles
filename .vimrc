@@ -235,16 +235,13 @@ if $TERM == 'screen'
    set t_Co=256
 endif
 
-let base16colorspace=256
-set background=dark
-colors base16-ir-black
-"if &t_Co >= 256
-   "set background=dark
-   "colors idlefingers256
-"else
-   "set background=dark
-   "colors default
-"endif
+if &t_Co >= 256
+   set background=dark
+   colors idlefingers256
+else
+   set background=dark
+   colors default
+endif
 
 " Make windows use a sensible shell for vim
 "set shell=powershell
