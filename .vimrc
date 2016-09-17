@@ -1,11 +1,6 @@
 " John's Personal VIM settings
 " Maintainer: John Weathers <jweathers@gmail.com>
 
-" Activate pathogen
-execute pathogen#infect()
-execute pathogen#infect('bundle.remote/{}')
-execute pathogen#helptags()
-
 "We don't want the vi-compatible version
 set nocompatible
 
@@ -191,49 +186,6 @@ let g:ctrlp_custom_ignore={
    \ 'dir': '\v[\/](tmp|coverage|data|log)$',
    \ }
 
-if executable('matcher')
-   let g:ctrlp_match_func = { 'match': 'GoodMatch' }
-
-   function! GoodMatch(items, str, limit, mmode, ispath, crfile, regex)
-
-      " Create a cache file if not yet exists
-      let cachefile = ctrlp#utils#cachedir().'/matcher.cache'
-      if !( filereadable(cachefile) && a:items == readfile(cachefile) )
-         call writefile(a:items, cachefile)
-      endif
-      if !filereadable(cachefile)
-         return []
-      endif
-
-      " a:mmode is currently ignored. In the future, we should probably do
-      " something about that. the matcher behaves like "full-line".
-      let cmd = 'matcher --limit '.a:limit.' --manifest '.cachefile.' '
-      if !( exists('g:ctrlp_dotfiles') && g:ctrlp_dotfiles )
-         let cmd = cmd.'--no-dotfiles '
-      endif
-      let cmd = cmd.a:str
-
-      return split(system(cmd), "\n")
-
-   endfunction
-end
-
-" CtrlP auto cache clearing.
-" ----------------------------------------------------------------------------
-"function! SetupCtrlP()
-  "if exists("g:loaded_ctrlp") && g:loaded_ctrlp
-    "augroup CtrlPExtension
-      "autocmd!
-      ""autocmd FocusGained  * CtrlPClearCache
-      "autocmd BufWritePost * CtrlPClearCache
-    "augroup END
-  "endif
-"endfunction
-
-"if has("autocmd")
-  "autocmd VimEnter * :call SetupCtrlP()
-"endif
-
 let g:clang_library_path='/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/libclang.dylib'
 
 " ag is fast enough that CtrlP doesn't need to cache
@@ -244,31 +196,6 @@ let g:ctrlp_use_caching = 0
 " Control settings for python highlighting
 let python_highlight_all = 1
 let python_slow_sync = 1
-
-" Control haskell syntastic settings
-"map <Leader>s :SyntasticToggleMode<CR>
-
-"set statusline+=%#warningmsg#
-"set statusline+=%{SyntasticStatuslineFlag()}
-"set statusline+=%*
-
-"let g:syntastic_always_populate_loc_list = 1
-"let g:syntastic_auto_loc_list = 0
-"let g:syntastic_check_on_open = 0
-"let g:syntastic_check_on_wq = 0
-
-" Control supertab settings for haskell
-"let g:SuperTabDefaultCompletionType = '<c-x><c-o>'
-
-"if has("gui_running")
-   "imap <c-space> <c-r>=SuperTabAlternateCompletion("\<lt>c-x>\<lt>c-o>")<cr>
-"else " no gui
-   "if has("unix")
-      "inoremap <Nul> <c-r>=SuperTabAlternateCompletion("\<lt>c-x>\<lt>c-o>")<cr>
-   "endif
-"endif
-"let g:haskellmode_completion_ghc = 1
-"autocmd FileType haskell setlocal omnifunc=necoghc#omnifunc
 
 " Switch syntax highlighting on, when the terminal has colors
 " Also switch on highlighting the last used search pattern.
@@ -288,8 +215,6 @@ else
    set background=dark
    colors default
 endif
-
-runtime macros/matchit.vim
 
 " Make windows use a sensible shell for vim
 "set shell=powershell
@@ -319,9 +244,6 @@ if has("autocmd")
 
       au FileType lisp let b:delimitMate_quotes="\""
 
-      "au BufWinEnter * let w:m1=matchadd('Search', '\%<81v.\%>77v', -1)
-      "au BufWinEnter * let w:m2=matchadd('ErrorMsg', '\%>80v.\+', -1)
-
       " When editing a file, always jump to the last known cursor position.
       " Don't do it when the position is invalid or when inside an event handler
       " (happens when dropping a file on gvim).
@@ -338,13 +260,3 @@ else
    set autoindent " always set autoindenting on
 
 endif " has("autocmd")
-
-set diffopt=filler,context:17,iwhite
-set diffexpr=MyDiff()
-function! MyDiff()
-   let opt = ''
-   if &diffopt =~ 'icase' | let opt = opt . '-i ' | endif
-   if &diffopt =~ 'iwhite' | let opt = opt . '-b ' | endif
-   silent execute '!diff -a ' . opt . '"' . v:fname_in . '" "' . v:fname_new . '" > "' . v:fname_out . '"'
-endfunction
-
