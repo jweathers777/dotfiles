@@ -3,8 +3,9 @@
 
 " vim plugins
 call plug#begin('~/.vim/plugged')
-Plug 'junegunn/fzf'
+Plug 'junegunn/fzf.vim'
 Plug 'tpope/vim-fugitive'
+Plug 'jiangmiao/auto-pairs'
 Plug 'kchmck/vim-coffee-script'
 Plug 'hcs42/vim-erlang'
 Plug 'vim-scripts/ZoomWin'
@@ -127,6 +128,8 @@ let xml_use_xhtml=1
 let g:slime_target="tmux"
 let g:slime_paste_file = tempname()
 
+let g:mustache_abbreviations = 1
+
 " Shortcut to rapidly toggel `set list`
 nmap <leader>l :set list!<CR>
 
@@ -140,10 +143,10 @@ let g:haddock_browser="/Applications/Google\ Chrome.app/Contents/MacOS/Google\ C
 map <leader>r :NERDTreeFind<CR>
 
 " Search via ack on the current word
-map <leader>* :Ack <cword><CR>
+map <leader>* :Ag <cword><CR>
 
 "Shortcut for searching with ack
-map <leader>a :Ack ""<Left>
+map <leader>a :Ag ""<Left>
 
 " NERD Tree
 map <leader>d :NERDTreeToggle<cr>
@@ -178,10 +181,6 @@ if executable('ag')
   set grepprg=ag\ --nogroup\ --nocolor
   "let g:ackprg = 'ag --nocolor --nogroup --column --ignore=*min.js --ignore=*min.css --ignore=public'
   let g:ackprg = 'ag --nocolor --nogroup --column'
-
-  " Use ag in CtrlP for listing files. Lightning fast and respects .gitignore
-  "let g:ctrlp_user_command = 'ag %s -l --nocolor --ignore=*min.js --ignore=*min.css --ignore=public  -g ""'
-  let g:ctrlp_user_command = 'ag %s -l -g ""'
 endif
 
 set grepformat=%f:%l:%m
@@ -189,40 +188,18 @@ set grepformat=%f:%l:%m
 " Enable fzf
 set rtp+=/usr/local/opt/fzf
 map <leader>t :FZF<CR>
-
-" Control-P mapping
-"map <leader>t :CtrlP<CR>
-map <leader>b :CtrlPBuffer<CR>
-map <leader>m :CtrlPMRU<CR>
-map <leader>k :CtrlPClearCache<CR>
-map <leader>. :CtrlPTag<CR>
-
-" Disable some buffer gator keys
-let g:buffergator_suppress_keymaps=1
-map <leader>f :BuffergatorOpen<CR>
-map <leader>F :BuffergatorClose<CR>
-
-" Disable default mappings for scratch
-let g:scratch_no_mappings = 1
-
-let g:ctrlp_max_files=0
-let g:ctrlp_follow_symlinks = 1
-let g:ctrlp_custom_ignore={
-   \ 'file': '\v(\.class|\.log)$',
-   \ 'rep': '\v[\/]\.(git|hg|svn)$',
-   \ 'dir': '\v[\/](tmp|coverage|data|log)$',
-   \ }
+map <leader>b :Buffers<CR>
+map <leader>a :Ag
+map <leader>. :Tags<CR>
 
 let g:clang_library_path='/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/libclang.dylib'
-
-" ag is fast enough that CtrlP doesn't need to cache
-let g:ctrlp_use_caching = 0
-
-"set wildignore+=*/.git/*,*.class,tmp/*,coverage/*
 
 " Control settings for python highlighting
 let python_highlight_all = 1
 let python_slow_sync = 1
+
+" Disable default key bindings for elm
+let g:elm_setup_keybindings = 0
 
 " Switch syntax highlighting on, when the terminal has colors
 " Also switch on highlighting the last used search pattern.
