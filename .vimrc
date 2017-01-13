@@ -27,6 +27,7 @@ Plug 'christoomey/vim-tmux-navigator'
 Plug 'lervag/vimtex'
 Plug 'flazz/vim-colorschemes'
 Plug 'elmcast/elm-vim'
+Plug 'tpope/vim-endwise'
 call plug#end()
 
 "We don't want the vi-compatible version
@@ -235,13 +236,14 @@ if has("autocmd")
    " Put these in an autocmd group, so that we can delete them easily.
    augroup vimrcEx
       au!
-      autocmd BufWritePre * :%s/\s\+$//e
+      autocmd FileType c,cpp,java,php,haskell,ruby,yaml,javascript,coffee,coffescript,scala,rust autocmd BufWritePre <buffer> %s/\s\+$//e
       autocmd BufEnter Gemfile set filetype=ruby
       autocmd BufEnter .gitconfig_local set filetype=gitconfig
       autocmd FileType haskell,ruby,yaml,jade,javascript,coffee,coffeescript,scala,html.handlebars setlocal ts=2 sw=2
       autocmd FileType java setlocal ts=2 sw=2 tw=100
       autocmd FileType xml,xhtml,html,htm,html.handlebars setlocal autoindent
       autocmd FileType xml,xhtml,html,htm,html.handlebars let b:delimitMate_matchpairs="(:),{:},[:]"
+      autocmd FileType tex set spelllang=en_us spell
       autocmd BufRead,BufNewFile Cargo.toml,Cargo.lock,*.rs compiler cargo
       au BufRead,BufNewFile SCons* set filetype=python
       au BufRead,BufNewFile *.hamlc set filetype=haml
@@ -256,9 +258,10 @@ if has("autocmd")
                \   exe "normal g`\"" |
                \ endif
 
+      autocmd VimEnter * delc Windows
+
       au FilterWritePre * if &diff | set background=light | colorscheme peaksea | endif
    augroup END
-
 else
 
    set autoindent " always set autoindenting on
