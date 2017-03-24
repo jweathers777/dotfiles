@@ -3,31 +3,38 @@
 
 " vim plugins
 call plug#begin('~/.vim/plugged')
-Plug 'junegunn/fzf.vim'
-Plug 'tpope/vim-fugitive'
-Plug 'jiangmiao/auto-pairs'
-Plug 'kchmck/vim-coffee-script'
-Plug 'hcs42/vim-erlang'
-Plug 'vim-scripts/ZoomWin'
+Plug 'cespare/vim-toml'
+Plug 'christoomey/vim-tmux-navigator'
 Plug 'elixir-lang/vim-elixir'
-Plug 'sjl/gundo.vim'
-Plug 'tpope/vim-haml'
+Plug 'elmcast/elm-vim'
+Plug 'fatih/vim-go'
+Plug 'flazz/vim-colorschemes'
+Plug 'garbas/vim-snipmate'
+Plug 'hcs42/vim-erlang'
+Plug 'honza/vim-snippets'
+Plug 'honza/vim-snippets'
+Plug 'https://github.com/rust-lang/rust.vim'
 Plug 'itchyny/vim-haskell-indent'
+Plug 'jeetsukumaran/vim-indentwise'
+Plug 'jiangmiao/auto-pairs'
+Plug 'junegunn/fzf.vim'
+Plug 'junegunn/vim-easy-align'
+Plug 'kchmck/vim-coffee-script'
+Plug 'lervag/vimtex'
+Plug 'MarcWeber/vim-addon-mw-utils'
+Plug 'mustache/vim-mustache-handlebars'
+Plug 'nathanaelkane/vim-indent-guides'
+Plug 'pangloss/vim-javascript'
 Plug 'scrooloose/nerdcommenter'
 Plug 'scrooloose/nerdtree'
-Plug 'tpope/vim-rails'
-Plug 'https://github.com/rust-lang/rust.vim'
-Plug 'tpope/vim-surround'
-Plug 'cespare/vim-toml'
-Plug 'junegunn/vim-easy-align'
-Plug 'fatih/vim-go'
-Plug 'pangloss/vim-javascript'
-Plug 'mustache/vim-mustache-handlebars'
-Plug 'christoomey/vim-tmux-navigator'
-Plug 'lervag/vimtex'
-Plug 'flazz/vim-colorschemes'
-Plug 'elmcast/elm-vim'
+Plug 'sjl/gundo.vim'
+Plug 'tomtom/tlib_vim'
 Plug 'tpope/vim-endwise'
+Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-haml'
+Plug 'tpope/vim-rails'
+Plug 'tpope/vim-surround'
+Plug 'vim-scripts/ZoomWin'
 call plug#end()
 
 "We don't want the vi-compatible version
@@ -44,6 +51,9 @@ set bs=2
 
 " Highlight the current line
 set cursorline
+
+" Use space to clear last search highlighting
+nnoremap <space> :noh<return><esc>
 
 " We want to wrap long lines but we want
 " to show them intelligently
@@ -143,16 +153,21 @@ let g:haddock_browser="/Applications/Google\ Chrome.app/Contents/MacOS/Google\ C
 
 map <leader>r :NERDTreeFind<CR>
 
-" Search via ack on the current word
-map <leader>* :Ag <cword><CR>
-
-"Shortcut for searching with ack
-map <leader>a :Ag ""<Left>
-
 " NERD Tree
 map <leader>d :NERDTreeToggle<cr>
-let NERDTreeIgnore=['\~$','^target$','\.hi','\.o']
+"let NERDTreeIgnore=['\~$','^target$','\.hi','\.o']
+let NERDTreeDirArrow=['\.hs','\.pyc','\.o']
 let NERDTreeDirArrows=1
+
+" NERD Commenter
+command! -nargs=? -range=% Ct :normal <line1>ggv<line2>gg<Leader>c<space>
+
+" Search and Replace
+function SearchAndReplaceFunc(search, replace)
+   execute '!for f in `ag -l ' . a:search . "`; do sed -e 's/" . a:search . "/" . a:replace . "/g' -i '' $f; done"
+endfunction
+command! -nargs=+ SearchAndReplaceCmd call SearchAndReplaceFunc(<f-args>)
+map <leader>p :SearchAndReplaceCmd <C-R><C-W>
 
 " Map shortcut for ZoomWin
 map <leader>z :ZoomWin<CR>
@@ -190,8 +205,21 @@ set grepformat=%f:%l:%m
 set rtp+=/usr/local/opt/fzf
 map <leader>t :FZF<CR>
 map <leader>b :Buffers<CR>
-map <leader>a :Ag
+map <leader>* :Ag <C-R><C-W><CR>
+map <leader>a :Ag <C-R>
 map <leader>. :Tags<CR>
+
+" --column: Show column number
+" --line-number: Show line number
+" --no-heading: Do not show file headings in results
+" --fixed-strings: Search term as a literal string
+" --ignore-case: Case insensitive search
+" --no-ignore: Do not respect .gitignore, etc...
+" --hidden: Search hidden files and folders
+" --follow: Follow symlinks
+" --glob: Additional conditions for search (in this case ignore everything in the .git/ folder)
+" --color: Search color options
+"command! -bang -nargs=* Find call fzf#vim#grep('rg --column --line-number --no-heading --fixed-strings --ignore-case --no-ignore --hidden --follow --glob "!.git/*" --color "always" '.shellescape(<q-args>), 1, <bang>0)
 
 let g:clang_library_path='/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/libclang.dylib'
 
@@ -209,13 +237,19 @@ if &t_Co > 2 || has("gui_running")
    set hlsearch
 endif
 
-if $TERM == 'screen'
-   set t_Co=256
-endif
-
-if &t_Co >= 256
-   set background=dark
-   colors idlefingers256
+if $TERM_PROGRAM =~ "iTerm"
+   "set termguicolors
+   set t_ut=
+   if $COLOR_SCHEME =~ "LIGHT"
+      set background=light
+      colors pyte
+   else
+      set background=dark
+      colors jellybeans
+      let g:jellybeans_use_term_italics = 1
+      "colors idlefingers256
+      highlight Comment cterm=italic
+   endif
 else
    set background=dark
    colors default
@@ -258,9 +292,7 @@ if has("autocmd")
                \   exe "normal g`\"" |
                \ endif
 
-      autocmd VimEnter * delc Windows
-
-      au FilterWritePre * if &diff | set background=light | colorscheme peaksea | endif
+      "au FilterWritePre * if &diff | set background=light | colorscheme peaksea | endif
    augroup END
 else
 

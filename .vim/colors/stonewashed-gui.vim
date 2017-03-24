@@ -1,0 +1,1 @@
+/Users/johnweathers/stonewashed-themes/colors/stonewashed-gui.vim
