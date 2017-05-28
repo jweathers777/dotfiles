@@ -28,6 +28,8 @@ Plug 'lervag/vimtex'
 Plug 'flazz/vim-colorschemes'
 Plug 'elmcast/elm-vim'
 Plug 'tpope/vim-endwise'
+Plug 'SirVer/ultisnips'
+Plug 'honza/vim-snippets'
 call plug#end()
 
 "We don't want the vi-compatible version
@@ -131,6 +133,14 @@ let g:slime_paste_file = tempname()
 
 let g:mustache_abbreviations = 1
 
+"let g:UltiSnipsExpandTrigger="<tab>"
+let g:UltiSnipsListSnippets="<c-x>"
+"let g:UltiSnipsJumpForwardTrigger="<c-b>"
+"let g:UltiSnipsJumpBackwardTrigger="<c-z>"
+
+" If you want :UltiSnipsEdit to split your window.
+" let g:UltiSnipsEditSplit="vertical"
+
 " Shortcut to rapidly toggel `set list`
 nmap <leader>l :set list!<CR>
 
@@ -193,6 +203,8 @@ map <leader>b :Buffers<CR>
 map <leader>a :Ag
 map <leader>. :Tags<CR>
 
+let g:fzf_history_dir = '~/.local/share/fzf-history'
+
 let g:clang_library_path='/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/libclang.dylib'
 
 " Control settings for python highlighting
@@ -201,6 +213,15 @@ let python_slow_sync = 1
 
 " Disable default key bindings for elm
 let g:elm_setup_keybindings = 0
+
+" Jedi configuration for python
+let g:jedi#goto_command = "<leader>v"
+let g:jedi#goto_assignments_command = "<leader>s"
+let g:jedi#goto_definitions_command = ""
+let g:jedi#documentation_command = "K"
+let g:jedi#usages_command = "<leader>m"
+let g:jedi#completions_command = "<C-Space>"
+let g:jedi#rename_command = "<leader>w"
 
 " Switch syntax highlighting on, when the terminal has colors
 " Also switch on highlighting the last used search pattern.
@@ -258,7 +279,7 @@ if has("autocmd")
                \   exe "normal g`\"" |
                \ endif
 
-      autocmd VimEnter * delc Windows
+      autocmd VimEnter * if exists('Windows') | delc Windows | endif
 
       au FilterWritePre * if &diff | set background=light | colorscheme peaksea | endif
    augroup END
