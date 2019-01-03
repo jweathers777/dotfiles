@@ -1,8 +1,8 @@
-" John's Personal VIM settings
 " Maintainer: John Weathers <jweathers@gmail.com>
 
 " vim plugins
 call plug#begin('~/.vim/plugged')
+Plug 'MarcWeber/vim-addon-mw-utils'
 Plug 'cespare/vim-toml'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'elixir-lang/vim-elixir'
@@ -12,19 +12,20 @@ Plug 'flazz/vim-colorschemes'
 Plug 'garbas/vim-snipmate'
 Plug 'hcs42/vim-erlang'
 Plug 'honza/vim-snippets'
-Plug 'honza/vim-snippets'
 Plug 'https://github.com/rust-lang/rust.vim'
-Plug 'itchyny/vim-haskell-indent'
+Plug 'isRuslan/vim-es6'
 Plug 'jeetsukumaran/vim-indentwise'
 Plug 'jiangmiao/auto-pairs'
+Plug 'joukevandermaas/vim-ember-hbs'
+Plug '/usr/local/opt/fzf'
 Plug 'junegunn/fzf.vim'
 Plug 'junegunn/vim-easy-align'
 Plug 'kchmck/vim-coffee-script'
 Plug 'lervag/vimtex'
-Plug 'MarcWeber/vim-addon-mw-utils'
-Plug 'mustache/vim-mustache-handlebars'
 Plug 'nathanaelkane/vim-indent-guides'
-Plug 'pangloss/vim-javascript'
+Plug 'neovimhaskell/haskell-vim'
+Plug 'ngmy/vim-rubocop'
+Plug 'jremmen/vim-ripgrep'
 Plug 'scrooloose/nerdcommenter'
 Plug 'scrooloose/nerdtree'
 Plug 'sjl/gundo.vim'
@@ -36,6 +37,8 @@ Plug 'tpope/vim-rails'
 Plug 'tpope/vim-surround'
 Plug 'vim-scripts/ZoomWin'
 call plug#end()
+
+packadd! matchit
 
 "We don't want the vi-compatible version
 set nocompatible
@@ -49,8 +52,10 @@ set showmatch
 " Make backspace key normal
 set bs=2
 
+set clipboard=unnamed
+
 " Highlight the current line
-set cursorline
+" set cursorline
 
 " Use space to clear last search highlighting
 nnoremap <space> :noh<return><esc>
@@ -130,7 +135,8 @@ let mapleader = ","
 set complete+=k
 
 " Turn off folding
-set nofoldenable
+"set nofoldenable
+"set foldmethod=indent
 
 " XML Plugin settings
 let xml_use_xhtml=1
@@ -148,8 +154,6 @@ nmap <leader>l :set list!<CR>
 set listchars=tab:▸\ ,eol:¬
 
 " Settings for haskell
-let g:ghc="/usr/local/bin/ghc"
-let g:haddock_browser="/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome"
 
 map <leader>r :NERDTreeFind<CR>
 
@@ -192,21 +196,21 @@ nmap <silent> <leader>ev :e $MYVIMRC<CR>
 nmap <silent> <leader>sv :so $MYVIMRC<CR>
 
 " The Silver Searcher
-if executable('ag')
-  " Use ag over grep
-  set grepprg=ag\ --nogroup\ --nocolor
-  "let g:ackprg = 'ag --nocolor --nogroup --column --ignore=*min.js --ignore=*min.css --ignore=public'
-  let g:ackprg = 'ag --nocolor --nogroup --column'
-endif
+"if executable('ag')
+  "" Use ag over grep
+  "set grepprg=ag\ --nogroup\ --nocolor
+  ""let g:ackprg = 'ag --nocolor --nogroup --column --ignore=*min.js --ignore=*min.css --ignore=public'
+  "let g:ackprg = 'ag --nocolor --nogroup --column'
+"endif
 
-set grepformat=%f:%l:%m
+"set grepformat=%f:%l:%m
 
 " Enable fzf
 set rtp+=/usr/local/opt/fzf
 map <leader>t :FZF<CR>
 map <leader>b :Buffers<CR>
-map <leader>* :Ag <C-R><C-W><CR>
-map <leader>a :Ag <C-R>
+map <leader>* :Rg <C-R><C-W><CR>
+map <leader>a :Rg <C-R>
 map <leader>. :Tags<CR>
 
 " --column: Show column number
@@ -245,9 +249,9 @@ if $TERM_PROGRAM =~ "iTerm"
       colors pyte
    else
       set background=dark
-      colors jellybeans
-      let g:jellybeans_use_term_italics = 1
-      "colors idlefingers256
+      "colors jellybeans
+      "let g:jellybeans_use_term_italics = 1
+      colors idlefingers256
       highlight Comment cterm=italic
    endif
 else
@@ -273,13 +277,17 @@ if has("autocmd")
       autocmd FileType c,cpp,java,php,haskell,ruby,yaml,javascript,coffee,coffescript,scala,rust autocmd BufWritePre <buffer> %s/\s\+$//e
       autocmd BufEnter Gemfile set filetype=ruby
       autocmd BufEnter .gitconfig_local set filetype=gitconfig
-      autocmd FileType haskell,ruby,yaml,jade,javascript,coffee,coffeescript,scala,html.handlebars setlocal ts=2 sw=2
+      autocmd FileType haskell setlocal smartindent
+      autocmd FileType haskell,ruby,yaml,jade,javascript,coffee,coffeescript,scala,html.handlebars,hbs setlocal ts=2 sw=2
       autocmd FileType java setlocal ts=2 sw=2 tw=100
+      autocmd FileType proto setlocal autoindent
       autocmd FileType xml,xhtml,html,htm,html.handlebars setlocal autoindent
       autocmd FileType xml,xhtml,html,htm,html.handlebars let b:delimitMate_matchpairs="(:),{:},[:]"
+      au FileType xml exe ":silent %!xmllint --format --recover - 2>/dev/null"
       autocmd FileType tex set spelllang=en_us spell
       autocmd BufRead,BufNewFile Cargo.toml,Cargo.lock,*.rs compiler cargo
       au BufRead,BufNewFile SCons* set filetype=python
+      au BufRead,BufNewFile Pipfile set filetype=toml
       au BufRead,BufNewFile *.hamlc set filetype=haml
 
       au FileType lisp let b:delimitMate_quotes="\""
