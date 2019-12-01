@@ -1,17 +1,7 @@
-# Read in a common environment configuration if present
-if [ -f "$HOME/.zshenv" ]; then
-   . "$HOME/.zshenv"
-fi
-
 # set PATH so it includes user's private bin if it exists
 if [ -d "$HOME/bin" ] ; then
    export PATH="$HOME/bin:$PATH"
 fi
-
-# Import rvm
-[[ -s "$HOME/.rvm/scripts/rvm" ]] && export rvm_prefix="$HOME/." && . "$HOME/.rvm/scripts/rvm"
-
-export PATH=$HOME/.rvm/bin:$PATH # Add RVM to PATH for scripting
 
 set -o vi
 
@@ -101,10 +91,6 @@ prompt_command() {
    echo -ne "\\033]0;${PWD##*/}\\007"
    PS1=$(prompt_string) 
 }
-
-
-# Import local environment
-[[ -s "$HOME/.localenv" ]] && . "$HOME/.localenv"
 
 # Import local environment
 [[ -s "$HOME/.aliases" ]] && . "$HOME/.aliases"
