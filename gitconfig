@@ -14,7 +14,7 @@
    changed = yellow
    untracked = red
 [core]
-   excludesfile = ~/.gitexclude
+	excludesfile = /Users/johnweathers/.gitexclude
 [push]
    default = tracking
 [alias]

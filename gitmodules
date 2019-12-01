@@ -1,6 +1,0 @@
-[submodule ".vim/vim-pandemic"]
-	path = .vim/vim-pandemic
-	url = https://github.com/jwcxz/vim-pandemic.git
-[submodule ".vim/matcher"]
-	path = .vim/matcher
-	url = https://github.com/burke/matcher.git

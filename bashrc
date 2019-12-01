@@ -59,20 +59,20 @@ function prompt_string {
             while read -r line; do
                local c=$((c+1))
                if ((c == 1)); then
-                  if [[ "$line" =~ ^'fatal: Not a git repository' ]]; then
+                  if [[ "$line" =~ ^'fatal: not a git repository' ]]; then
                      is_git_repos=false
                   else
                      if [[ "$line" =~ ^'# Not currently on any branch.' ]]; then
                         local branch='(none)'
                      else
-                        local branch=$(echo $line | awk '{ print $4 }')
+                        local branch=$(echo $line | awk '{ print $3 }')
                      fi
                      local repo=${PWD##*/}
                      printf "\n${yellow}[${cyan}$repo${blue}:${cyan}$branch"
                   fi
-               elif [[ "$line" =~ ^'# Untracked files:' ]]; then
+               elif [[ "$line" =~ ^'Untracked files:' ]]; then
                   printf "${red}●"
-               elif [[ "$line" =~ ^'# Changed but not updated:' ]]; then
+               elif [[ "$line" =~ ^'Changes not staged for commit:' ]]; then
                   printf "${yellow}●"
                elif [[ "$line" =~ ^'# Changes to be committed:' ]]; then
                   printf "${green}●"
