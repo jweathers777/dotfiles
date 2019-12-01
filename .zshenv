@@ -12,10 +12,7 @@ export LSCOLORS=CxFxExDxBxegedabagacad
 export POW_WORKERS=4
 export JRUBY_OPTS="--1.9"
 export CLASSPATH=~/src/weka-3-7-10/weka.jar:~/src/ABAGAIL/ABAGAIL.jar:~/src/burlap/lib/\*:~/src/burlap/dist/burlap.jar
-export GOPATH=$HOME/go
 
-GOVERSION=$(brew list go | head -n 1 | cut -d '/' -f 6)
-export GOROOT=$(brew --prefix)/Cellar/go/$GOVERSION/libexec
 export FZF_DEFAULT_COMMAND='ag -g ""'
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 export ANDROID_HOME=$HOME/Library/Android/sdk

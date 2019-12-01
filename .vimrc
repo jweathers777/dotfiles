@@ -3,33 +3,33 @@
 
 " vim plugins
 call plug#begin('~/.vim/plugged')
-Plug 'junegunn/fzf.vim'
-Plug 'tpope/vim-fugitive'
-Plug 'jiangmiao/auto-pairs'
-Plug 'kchmck/vim-coffee-script'
-Plug 'hcs42/vim-erlang'
-Plug 'vim-scripts/ZoomWin'
+Plug 'SirVer/ultisnips'
+Plug 'cespare/vim-toml'
+Plug 'christoomey/vim-tmux-navigator'
 Plug 'elixir-lang/vim-elixir'
-Plug 'sjl/gundo.vim'
-Plug 'tpope/vim-haml'
-Plug 'itchyny/vim-haskell-indent'
+Plug 'elmcast/elm-vim'
+Plug 'fatih/vim-go'
+Plug 'flazz/vim-colorschemes'
+Plug 'hcs42/vim-erlang'
+Plug 'honza/vim-snippets'
+Plug 'https://github.com/rust-lang/rust.vim'
+Plug 'jiangmiao/auto-pairs'
+Plug 'junegunn/fzf.vim'
+Plug 'junegunn/vim-easy-align'
+Plug 'kchmck/vim-coffee-script'
+Plug 'lervag/vimtex'
+Plug 'mustache/vim-mustache-handlebars'
+Plug 'neovimhaskell/haskell-vim'
+Plug 'pangloss/vim-javascript'
 Plug 'scrooloose/nerdcommenter'
 Plug 'scrooloose/nerdtree'
-Plug 'tpope/vim-rails'
-Plug 'https://github.com/rust-lang/rust.vim'
-Plug 'tpope/vim-surround'
-Plug 'cespare/vim-toml'
-Plug 'junegunn/vim-easy-align'
-Plug 'fatih/vim-go'
-Plug 'pangloss/vim-javascript'
-Plug 'mustache/vim-mustache-handlebars'
-Plug 'christoomey/vim-tmux-navigator'
-Plug 'lervag/vimtex'
-Plug 'flazz/vim-colorschemes'
-Plug 'elmcast/elm-vim'
+Plug 'sjl/gundo.vim'
 Plug 'tpope/vim-endwise'
-Plug 'SirVer/ultisnips'
-Plug 'honza/vim-snippets'
+Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-haml'
+Plug 'tpope/vim-rails'
+Plug 'tpope/vim-surround'
+Plug 'vim-scripts/ZoomWin'
 call plug#end()
 
 "We don't want the vi-compatible version
@@ -147,10 +147,6 @@ nmap <leader>l :set list!<CR>
 " Use the same symbols as TextMate for tabstops and EOLs
 set listchars=tab:▸\ ,eol:¬
 
-" Settings for haskell
-let g:ghc="/usr/local/bin/ghc"
-let g:haddock_browser="/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome"
-
 map <leader>r :NERDTreeFind<CR>
 
 " Search via ack on the current word
@@ -223,6 +219,8 @@ let g:jedi#usages_command = "<leader>m"
 let g:jedi#completions_command = "<C-Space>"
 let g:jedi#rename_command = "<leader>w"
 
+:inoremap <C-D> <Esc>:call setline(".",substitute(getline(line(".")),'^\s*',matchstr(getline(line(".")-1),'^\s*'),''))<CR>I
+
 " Switch syntax highlighting on, when the terminal has colors
 " Also switch on highlighting the last used search pattern.
 if &t_Co > 2 || has("gui_running")
@@ -260,6 +258,7 @@ if has("autocmd")
       autocmd FileType c,cpp,java,php,haskell,ruby,yaml,javascript,coffee,coffescript,scala,rust autocmd BufWritePre <buffer> %s/\s\+$//e
       autocmd BufEnter Gemfile set filetype=ruby
       autocmd BufEnter .gitconfig_local set filetype=gitconfig
+      autocmd FileType haskell set smartindent
       autocmd FileType haskell,ruby,yaml,jade,javascript,coffee,coffeescript,scala,html.handlebars setlocal ts=2 sw=2
       autocmd FileType java setlocal ts=2 sw=2 tw=100
       autocmd FileType xml,xhtml,html,htm,html.handlebars setlocal autoindent
@@ -268,6 +267,7 @@ if has("autocmd")
       autocmd BufRead,BufNewFile Cargo.toml,Cargo.lock,*.rs compiler cargo
       au BufRead,BufNewFile SCons* set filetype=python
       au BufRead,BufNewFile *.hamlc set filetype=haml
+      autocmd BufWritePre *.py :%s/\s\+$//e
 
       au FileType lisp let b:delimitMate_quotes="\""
 

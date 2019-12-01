@@ -8,6 +8,11 @@ if [ -d "$HOME/bin" ] ; then
    export PATH="$HOME/bin:$PATH"
 fi
 
+# Import rvm
+[[ -s "$HOME/.rvm/scripts/rvm" ]] && export rvm_prefix="$HOME/." && . "$HOME/.rvm/scripts/rvm"
+
+export PATH=$HOME/.rvm/bin:$PATH # Add RVM to PATH for scripting
+
 set -o vi
 
 # enable programmable completion features (you don't need to enable
@@ -103,10 +108,5 @@ prompt_command() {
 
 # Import local environment
 [[ -s "$HOME/.aliases" ]] && . "$HOME/.aliases"
-
-# Import rvm
-[[ -s "$HOME/.rvm/scripts/rvm" ]] && export rvm_prefix="$HOME/." && . "$HOME/.rvm/scripts/rvm"
-
-PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
 
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
