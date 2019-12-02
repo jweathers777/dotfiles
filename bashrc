@@ -74,7 +74,7 @@ function prompt_string {
                   printf "${red}●"
                elif [[ "$line" =~ ^'Changes not staged for commit:' ]]; then
                   printf "${yellow}●"
-               elif [[ "$line" =~ ^'# Changes to be committed:' ]]; then
+               elif [[ "$line" =~ ^'Changes to be committed:' ]]; then
                   printf "${green}●"
                fi
             done
