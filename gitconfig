@@ -35,6 +35,7 @@
    lod = log --oneline --decorate
    lpo = log --pretty=oneline --abbrev-commit --graph --decorate
    st = status
+   pf = push --force
    pub = "!f() { git push -u ${1:-origin} `git symbolic-ref HEAD`; }; f"
    mt = mergetool
    rbc = rebase --continue
