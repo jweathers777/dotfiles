@@ -79,6 +79,12 @@ noremap <Down> <NOP>
 noremap <Left> <NOP>
 noremap <Right> <NOP>
 
+" Easier split navigations
+nnoremap <C-J> <C-W><C-J>
+nnoremap <C-K> <C-W><C-K>
+nnoremap <C-L> <C-W><C-L>
+nnoremap <C-H> <C-W><C-H>
+
 " Toggle paste
 nnoremap <F2> :set invpaste paste?<CR>
 set pastetoggle=<F2>
@@ -86,6 +92,9 @@ set showmode
 
 " Expand tabs to spaces
 set expandtab
+
+set splitbelow
+set splitright
 
 set number
 set history=50 "Keep 50 lines of command line history
