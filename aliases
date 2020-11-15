@@ -13,3 +13,4 @@ alias brl='bundle exec rails'
 alias be='bundle exec'
 alias bo='bundle open'
 alias .G="git --work-tree=$HOME/ --git-dir=$HOME/dotfiles.git"
+alias sws="find . -iname '*.txt' -type f -exec sed -i '' 's/[[:space:]]\{1,\}$//' {} \+"
