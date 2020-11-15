@@ -3,7 +3,7 @@
 
 " vim plugins
 call plug#begin('~/.vim/plugged')
-Plug 'SirVer/ultisnips'
+"Plug 'SirVer/ultisnips'
 Plug 'cespare/vim-toml'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'elixir-lang/vim-elixir'
