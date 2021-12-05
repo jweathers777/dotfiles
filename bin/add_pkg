@@ -1,0 +1,10 @@
+#!/usr/bin/env zsh
+
+src_path=$1
+plugin_module=vim/pack/plugins/start/$src_path:t:r
+
+cd ~/dotfiles
+git submodule init
+git submodule add $src_path $plugin_module
+git add .gitmodules $plugin_modile 
+git commit

@@ -1,0 +1,7 @@
+#!/usr/bin/env zsh
+
+plugin_module=$1
+git submodule deinit $plugin_module
+git rm $plugin_module
+rm -Rf .git/modules/$plugin_module
+git commit
