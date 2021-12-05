@@ -267,7 +267,7 @@ if has("autocmd")
       autocmd FileType c,cpp,java,php,haskell,ruby,yaml,javascript,coffee,coffescript,scala,rust autocmd BufWritePre <buffer> %s/\s\+$//e
       autocmd BufEnter Gemfile set filetype=ruby
       autocmd BufEnter .gitconfig_local set filetype=gitconfig
-      autocmd FileType haskell set smartindent
+      autocmd FileType haskell set autoindent
       autocmd FileType haskell,ruby,yaml,jade,javascript,coffee,coffeescript,scala,html.handlebars setlocal ts=2 sw=2
       autocmd FileType java setlocal ts=2 sw=2 tw=100
       autocmd FileType xml,xhtml,html,htm,html.handlebars setlocal autoindent

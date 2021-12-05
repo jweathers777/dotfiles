@@ -96,3 +96,4 @@ prompt_command() {
 [[ -s "$HOME/.aliases" ]] && . "$HOME/.aliases"
 
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
+[ -f "/Users/johnweathers/.ghcup/env" ] && source "/Users/johnweathers/.ghcup/env" # ghcup-env
