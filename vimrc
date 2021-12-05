@@ -4,7 +4,6 @@
 "Plug 'cespare/vim-toml'
 "Plug 'elixir-lang/vim-elixir'
 "Plug 'elmcast/elm-vim'
-"Plug 'fatih/vim-go'
 "Plug 'flazz/vim-colorschemes'
 "Plug 'hcs42/vim-erlang'
 "Plug 'honza/vim-snippets'
