@@ -13,3 +13,6 @@
 [submodule "vim/pack/plugins/start/haskell-vim"]
 	path = vim/pack/plugins/start/haskell-vim
 	url = https://github.com/neovimhaskell/haskell-vim.git
+[submodule "vim/pack/plugins/start/vim-surround"]
+	path = vim/pack/plugins/start/vim-surround
+	url = https://github.com/tpope/vim-surround.git
