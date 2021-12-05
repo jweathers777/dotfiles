@@ -5,12 +5,8 @@ set_ls_alias=$(ls --color=auto -F 2>/dev/null)
 [ "$set_ls_alias" ] && alias ls='ls --color=auto -F'
 unset set_ls_alias
 
-alias tld='tail -f log/development.log'
-alias rsu='kill -HUP `cat tmp/pids/unicorn.pid`'
-alias stu='kill `cat tmp/pids/unicorn.pid`'
 alias brk='bundle exec rake'
 alias brl='bundle exec rails'
 alias be='bundle exec'
 alias bo='bundle open'
-alias .G="git --work-tree=$HOME/ --git-dir=$HOME/dotfiles.git"
 alias sws="find . -iname '*.txt' -type f -exec sed -i '' 's/[[:space:]]\{1,\}$//' {} \+"
