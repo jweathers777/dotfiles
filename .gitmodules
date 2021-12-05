@@ -10,3 +10,6 @@
 [submodule "vim/pack/plugins/start/fzf.vim"]
 	path = vim/pack/plugins/start/fzf.vim
 	url = https://github.com/junegunn/fzf.vim.git
+[submodule "vim/pack/plugins/start/haskell-vim"]
+	path = vim/pack/plugins/start/haskell-vim
+	url = https://github.com/neovimhaskell/haskell-vim.git
