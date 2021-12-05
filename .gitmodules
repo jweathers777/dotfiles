@@ -25,3 +25,6 @@
 [submodule "vim/pack/plugins/start/vim-javascript"]
 	path = vim/pack/plugins/start/vim-javascript
 	url = https://github.com/pangloss/vim-javascript.git
+[submodule "vim/pack/plugins/start/vim-tmux-navigator"]
+	path = vim/pack/plugins/start/vim-tmux-navigator
+	url = https://github.com/christoomey/vim-tmux-navigator.git
