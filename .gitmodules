@@ -1,3 +1,6 @@
 [submodule "vim/pack/plugins/start/rust"]
 	path = vim/pack/plugins/start/rust
 	url = https://github.com/rust-lang/rust.vim
+[submodule "vim/pack/plugins/start/nerdcommenter"]
+	path = vim/pack/plugins/start/nerdcommenter
+	url = https://github.com/preservim/nerdcommenter.git
