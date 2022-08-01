@@ -146,11 +146,6 @@ compdef _rake rake
 # Import functions
 [[ -s "$HOME/.functions" ]] && . "$HOME/.functions"
 
-# Import rvm
-[[ -s "$HOME/.rvm/scripts/rvm" ]] && export rvm_prefix="$HOME/." && . "$HOME/.rvm/scripts/rvm"
-
-__rvm_project_rvmrc
-
 # -----------------------------------------------
 #  END
 # -----------------------------------------------
