@@ -34,3 +34,6 @@
 [submodule "vim/pack/plugins/start/fzf"]
 	path = vim/pack/plugins/start/fzf
 	url = https://github.com/junegunn/fzf
+[submodule "vim/pack/plugins/start/vim-markdown"]
+	path = vim/pack/plugins/start/vim-markdown
+	url = https://github.com/gabrielelana/vim-markdown
