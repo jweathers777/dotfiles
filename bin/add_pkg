@@ -6,5 +6,5 @@ plugin_module=vim/pack/plugins/start/$src_path:t:r
 cd ~/dotfiles
 git submodule init
 git submodule add $src_path $plugin_module
-git add .gitmodules $plugin_modile 
+git add .gitmodules $plugin_module 
 git commit

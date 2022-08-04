@@ -46,3 +46,6 @@
 [submodule "vim/pack/plugins/start/vim-jsx-typescript"]
 	path = vim/pack/plugins/start/vim-jsx-typescript
 	url = https://github.com/peitalin/vim-jsx-typescript
+[submodule "vim/pack/plugins/start/vim-styled-components"]
+	path = vim/pack/plugins/start/vim-styled-components
+	url = https://github.com/styled-components/vim-styled-components.git
