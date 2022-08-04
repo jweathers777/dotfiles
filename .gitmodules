@@ -37,3 +37,6 @@
 [submodule "vim/pack/plugins/start/vim-markdown"]
 	path = vim/pack/plugins/start/vim-markdown
 	url = https://github.com/gabrielelana/vim-markdown
+[submodule "vim/pack/plugins/start/typescript-vim"]
+	path = vim/pack/plugins/start/typescript-vim
+	url = https://github.com/leafgarland/typescript-vim
