@@ -40,3 +40,6 @@
 [submodule "vim/pack/plugins/start/typescript-vim"]
 	path = vim/pack/plugins/start/typescript-vim
 	url = https://github.com/leafgarland/typescript-vim
+[submodule "vim/pack/plugins/start/vim-jsx-pretty"]
+	path = vim/pack/plugins/start/vim-jsx-pretty
+	url = https://github.com/MaxMEllon/vim-jsx-pretty
