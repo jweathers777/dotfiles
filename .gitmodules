@@ -49,3 +49,6 @@
 [submodule "vim/pack/plugins/start/vim-styled-components"]
 	path = vim/pack/plugins/start/vim-styled-components
 	url = https://github.com/styled-components/vim-styled-components.git
+[submodule "vim/pack/plugins/start/vim-graphql"]
+	path = vim/pack/plugins/start/vim-graphql
+	url = https://github.com/jparise/vim-graphql
