@@ -22,6 +22,7 @@
    br = branch
    brd = branch -d
    c  = commit
+   cl = "!f() { git branch --merged | egrep -v \"(^\\*|main|master)\" | xargs git branch -d; }; f"
    co = checkout
    cob = checkout -b
    cos = "!f() { git checkout $(git branch | grep $1); }; f"
@@ -40,6 +41,7 @@
    mt = mergetool
    rbc = rebase --continue
    rbs = rebase --skip
+   wip = commit -am'WIP'
 
 [mergetool]
    keepBackup = false

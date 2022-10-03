@@ -10,3 +10,4 @@ alias brl='bundle exec rails'
 alias be='bundle exec'
 alias bo='bundle open'
 alias sws="find . -iname '*.txt' -type f -exec sed -i '' 's/[[:space:]]\{1,\}$//' {} \+"
+alias kraken='open -na "GitKraken" --args -p "$(git rev-parse --show-toplevel)"'

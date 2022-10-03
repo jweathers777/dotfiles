@@ -143,11 +143,9 @@ set listchars=tab:▸\ ,eol:¬
 
 map <leader>r :NERDTreeFind<CR>
 
-" Search via ack on the current word
-map <leader>* :Ag <cword><CR>
-
-"Shortcut for searching with ack
-map <leader>a :Ag ""<Left>
+nmap <leader>a <Plug>RgRawSearch
+vmap <leader>a <Plug>RgRawVisualSearch
+nmap <leader>* <Plug>RgRawWordUnderCurso
 
 " NERD Tree
 map <leader>d :NERDTreeToggle<cr>
@@ -176,21 +174,12 @@ map <leader>cp :let @+ = expand("%:p")<cr>
 nmap <silent> <leader>ev :e $MYVIMRC<CR>
 nmap <silent> <leader>sv :so $MYVIMRC<CR>
 
-" The Silver Searcher
-if executable('ag')
-  " Use ag over grep
-  set grepprg=ag\ --nogroup\ --nocolor
-  "let g:ackprg = 'ag --nocolor --nogroup --column --ignore=*min.js --ignore=*min.css --ignore=public'
-  let g:ackprg = 'ag --nocolor --nogroup --column'
-endif
-
 set grepformat=%f:%l:%m
 
 " Enable fzf
 set rtp+=/usr/local/opt/fzf
 map <leader>t :FZF<CR>
 map <leader>b :Buffers<CR>
-map <leader>a :Ag
 map <leader>. :Tags<CR>
 
 let g:fzf_history_dir = '~/.local/share/fzf-history'

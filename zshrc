@@ -3,6 +3,7 @@ export EDITOR=vim
 export HISTFILE=~/.histfile
 export HISTSIZE=1000000   # The number of items for the internal history list
 export SAVEHIST=$HISTSIZE # The maximum number of items for the history file
+export FZF_DEFAULT_COMMAND='rg --files --no-ignore-vcs --hidden'
 
 setopt SHAREHISTORY
 setopt HIST_IGNORE_ALL_DUPS
