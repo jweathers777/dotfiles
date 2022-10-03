@@ -143,9 +143,9 @@ set listchars=tab:▸\ ,eol:¬
 
 map <leader>r :NERDTreeFind<CR>
 
-nmap <leader>a <Plug>RgRawSearch
+map <leader>a <Plug>RgRawSearch<CR>
 vmap <leader>a <Plug>RgRawVisualSearch
-nmap <leader>* <Plug>RgRawWordUnderCurso
+map <leader>* <Plug>RgRawWordUnderCursor<CR>
 
 " NERD Tree
 map <leader>d :NERDTreeToggle<cr>
