@@ -52,3 +52,6 @@
 [submodule "vim/pack/plugins/start/vim-graphql"]
 	path = vim/pack/plugins/start/vim-graphql
 	url = https://github.com/jparise/vim-graphql
+[submodule "vim/pack/plugins/start/vim-agriculture"]
+	path = vim/pack/plugins/start/vim-agriculture
+	url = https://github.com/jesseleite/vim-agriculture
