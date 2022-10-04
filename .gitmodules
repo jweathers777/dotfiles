@@ -55,3 +55,6 @@
 [submodule "vim/pack/plugins/start/vim-agriculture"]
 	path = vim/pack/plugins/start/vim-agriculture
 	url = https://github.com/jesseleite/vim-agriculture
+[submodule "vim/pack/plugins/start/vim-code-dark"]
+	path = vim/pack/plugins/start/vim-code-dark
+	url = https://github.com/tomasiser/vim-code-dark
