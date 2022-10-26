@@ -15,6 +15,7 @@
    untracked = red
 [core]
 	excludesfile = /Users/johnweathers/.gitexclude
+	pager = diff-so-fancy | less --tabs=4 -RFX
 [push]
    default = tracking
 [alias]
@@ -39,6 +40,7 @@
    pf = push --force
    pub = "!f() { git push -u ${1:-origin} `git symbolic-ref HEAD`; }; f"
    mt = mergetool
+   orig = log --diff-filter=A -- 
    rbc = rebase --continue
    rbs = rebase --skip
    wip = commit -am'WIP'
@@ -63,3 +65,5 @@
 	clean = git-lfs clean -- %f
 	smudge = git-lfs smudge -- %f
 	process = git-lfs filter-process
+[interactive]
+	diffFilter = diff-so-fancy --patch

@@ -217,7 +217,7 @@ endif
 
 if &t_Co >= 256
    set background=dark
-   colors idlefingers256
+   colors codedark
 else
    set background=dark
    colors default
