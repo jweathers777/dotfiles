@@ -1,5 +1,6 @@
 #!/usr/bin/env zsh
 
+cd ~/dotfiles
 plugin_module=$1
 git submodule deinit $plugin_module
 git rm $plugin_module
