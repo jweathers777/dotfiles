@@ -20,3 +20,4 @@ export ANDROID_HOME=$HOME/Library/Android/sdk
 PATH=$PATH:$HOME/.local/bin:$HOME/.cargo/bin:$HOME/.node/bin
 PATH=$PATH:$ANDROID_HOME/platform-tools:$ANDROID_HOME/tools
 PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
+. "$HOME/.cargo/env"
