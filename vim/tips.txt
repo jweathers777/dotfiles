@@ -166,6 +166,7 @@ __BEGIN__
 :g/<input\|<form/p          : ORing
 :g/^/put_                   : double space file (pu = put)
 :g/^/m0                     : Reverse file (m = move)
+:.,'ag/^/m 'a               : Reverse range from current line to marker a
 :g/^/m$                     : No effect! *N*
 :'a,'bg/^/m'b               : Reverse a section a to b
 :g/^/t.                     : duplicate every line
