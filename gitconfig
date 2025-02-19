@@ -36,6 +36,7 @@
    lp = log -p
    lod = log --oneline --decorate
    lpo = log --pretty=oneline --abbrev-commit --graph --decorate
+   lu = ls-files --others --exclude-standard
    st = status
    pf = push --force
    pub = "!f() { git push -u ${1:-origin} `git symbolic-ref HEAD`; }; f"

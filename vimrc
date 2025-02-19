@@ -93,7 +93,7 @@ set smartcase  "Override the ignore case for mixed patterns
 set nobackup
 
 " We want the xterm way of doing things instead of M$ Windows
-behave xterm
+"behave xterm
 
 " It's nice to be able to use the mouse in the Terminal
 set mouse=a
@@ -164,7 +164,6 @@ map <leader>rt :!ctags --extra=+f -R *<CR><CR>
 map <leader>g :Tlist<CR>
 
 " Gundo
-map <leader>u :GundoToggle<CR>
 
 map <leader>lcd :lcd %:p:h<CR>
 
@@ -181,6 +180,9 @@ set rtp+=/usr/local/opt/fzf
 map <leader>t :FZF<CR>
 map <leader>b :Buffers<CR>
 map <leader>. :Tags<CR>
+
+" Convert each name_like_this to NameLikeThis in current line.
+map <leader>u :s#\(\%(\<\l\+\)\%(_\)\@=\)\|_\(\l\)#\u\1\2#g
 
 let g:fzf_history_dir = '~/.local/share/fzf-history'
 
